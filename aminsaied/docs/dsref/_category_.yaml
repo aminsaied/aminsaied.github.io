@@ -1,0 +1,7 @@
+label: DS-Ref
+position: 3
+link:
+  type: generated-index
+  description: Data Science Reference.
+customProps:
+  description: This description can be used in the swizzled DocCard
