@@ -15,7 +15,7 @@ I exist in some other parts of the internet:
 This webpage consists of:
 
 - [**Blog**](/blog). You know what a blog is!
-- [**DS Ref**](/dsref). A set of notes, code-snippets and references
+- [**DS Ref**](/docs/dsref). A set of notes, code-snippets and references
     that I've gathered while working as a Data Scientist / ML Engineer.
 
 </div>
