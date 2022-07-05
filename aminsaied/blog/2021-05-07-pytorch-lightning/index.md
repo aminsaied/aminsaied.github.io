@@ -1,7 +1,10 @@
 ---
 title: '✨Talk: Introduction to PyTorch Lightning'
 authors:
-    - aminsaied
+  - aminsaied
+tags:
+  - talk
+  - nlp
 ---
 
 **Abstract.** A hands on guide to using PyTorch Lightning. Concretely,

@@ -1,7 +1,10 @@
 ---
 title: '✨Talk: GPT-1 and GPT-2 Review'
 authors:
-    - aminsaied
+  - aminsaied
+tags:
+  - talk
+  - nlp
 ---
 
 **Abstract.** In this talk we'll review the GPT-1 paper

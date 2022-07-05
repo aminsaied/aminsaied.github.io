@@ -1,7 +1,11 @@
 ---
 title: '✨Talk: Graph Neural Networks'
 authors:
-    - aminsaied
+  - aminsaied
+tags:
+  - talk
+  - gnn
+  - intro
 ---
 
 **Abstract.** A gentle introduction to graph neural networks (GNN)s

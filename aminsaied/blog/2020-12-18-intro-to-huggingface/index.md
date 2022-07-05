@@ -1,7 +1,10 @@
 ---
 title: '✨Talk: Introduction to 🤗Hugging Face'
 authors:
-    - aminsaied
+  - aminsaied
+tags:
+  - talk
+  - nlp
 ---
 
 **Abstract.** In this talk we'll review the 🤗Hugging Face Transformers

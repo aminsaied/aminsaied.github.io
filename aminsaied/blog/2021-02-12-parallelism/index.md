@@ -1,7 +1,10 @@
 ---
 title: '✨Talk: Pipeline Model Parallelism'
 authors:
-    - aminsaied
+  - aminsaied
+tags:
+  - talk
+  - nlp
 ---
 
 **Abstract.** Models are getting increasingly large, to the point that
