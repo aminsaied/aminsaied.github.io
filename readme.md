@@ -3,7 +3,7 @@
 Manual deployment
 
 ```bash
-GIT_USER=<GITHUB_USERNAME> USE_SSH=true yarn deploy
+GIT_USER=<GITHUB_USERNAME> USE_SSH=true DEPLOYMENT_BRANCH="gh_deploy" yarn deploy
 ```
 
 ## Setup
