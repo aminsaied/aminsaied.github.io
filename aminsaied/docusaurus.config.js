@@ -12,7 +12,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'https://avatars.githubusercontent.com/u/13423197?v=4',
+  favicon: 'img/logo.svg',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -53,18 +53,13 @@ const config = {
         title: 'Amin Saied',
         logo: {
           alt: 'That is me!',
-          src: 'https://avatars.githubusercontent.com/u/13423197?v=4',
+          src: 'img/logo.svg',
         },
         items: [
-          {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Tutorial',
-          },
           {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/docs/dsref', label: 'DS Ref', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/aminsaied/',
             label: 'GitHub',
             position: 'right',
           },
