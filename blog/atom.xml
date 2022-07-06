@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://aminsaied.github.io/blog</id>
+    <title>Amin Saied Blog</title>
+    <updated>2021-09-24T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://aminsaied.github.io/blog"/>
+    <subtitle>Amin Saied Blog</subtitle>
+    <icon>https://aminsaied.github.io/img/logo.svg</icon>
+    <entry>
+        <title type="html"><![CDATA[✨Talk: Roberta and Electra]]></title>
+        <id>/2021/09/24/roberta-electra</id>
+        <link href="https://aminsaied.github.io/blog/2021/09/24/roberta-electra"/>
+        <updated>2021-09-24T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Abstract. In this talk I give an overview of two important transformer]]></summary>
+        <content type="html"><![CDATA[<p><strong>Abstract.</strong> In this talk I give an overview of two important transformer
+models in NLP.</p><p>😴 Lazy blog - just a link to the talk's <a target="_blank" href="/assets/files/2021-09-24-deck-bfb6e465f155ab11a614dde36513e512.pdf">📋PDF</a>.</p>]]></content>
+        <author>
+            <name>Amin Saied</name>
+            <uri>https://github.com/aminsaied</uri>
+        </author>
+        <category label="talk" term="talk"/>
+        <category label="nlp" term="nlp"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[✨Talk: Graph Neural Networks]]></title>
+        <id>/2021/08/19/gnns</id>
+        <link href="https://aminsaied.github.io/blog/2021/08/19/gnns"/>
+        <updated>2021-08-19T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Abstract. A gentle introduction to graph neural networks (GNN)s]]></summary>
+        <content type="html"><![CDATA[<p><strong>Abstract.</strong> A gentle introduction to graph neural networks (GNN)s</p><ul><li>Attention mechanisms in GNNs</li><li>PyTorch Geometric example: Karate Dataset</li><li>This will be an introductory talk with lots of pictures (in fact, it
+will almost exclusively be pictures!)</li></ul><p>😴 Lazy blog - just a link to the talk's <a target="_blank" href="/assets/files/2021-08-19-deck-a2df5fa6372f69d07cc422f3c7800d37.pdf">📋PDF</a>.</p>]]></content>
+        <author>
+            <name>Amin Saied</name>
+            <uri>https://github.com/aminsaied</uri>
+        </author>
+        <category label="talk" term="talk"/>
+        <category label="gnn" term="gnn"/>
+        <category label="intro" term="intro"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[✨Talk: Introduction to PyTorch Lightning]]></title>
+        <id>/2021/05/07/pytorch-lightning</id>
+        <link href="https://aminsaied.github.io/blog/2021/05/07/pytorch-lightning"/>
+        <updated>2021-05-07T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Abstract. A hands on guide to using PyTorch Lightning. Concretely,]]></summary>
+        <content type="html"><![CDATA[<p><strong>Abstract.</strong> A hands on guide to using PyTorch Lightning. Concretely,
+we grab the GPT-2 model from Huggingface and build a lightning module
+to train it (more or less from scratch).</p><p>😴 Lazy blog - just a link to the talk's <a target="_blank" href="/assets/files/2021-05-07-deck-795bfc446fe8fcec707c1c4ead2d099b.pdf">📋PDF</a>.</p>]]></content>
+        <author>
+            <name>Amin Saied</name>
+            <uri>https://github.com/aminsaied</uri>
+        </author>
+        <category label="talk" term="talk"/>
+        <category label="nlp" term="nlp"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[✨Talk: Pipeline Model Parallelism]]></title>
+        <id>/2021/02/12/parallelism</id>
+        <link href="https://aminsaied.github.io/blog/2021/02/12/parallelism"/>
+        <updated>2021-02-12T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Abstract. Models are getting increasingly large, to the point that]]></summary>
+        <content type="html"><![CDATA[<p><strong>Abstract.</strong> Models are getting increasingly large, to the point that
+they don't always fit on a single device! We discuss some techniques to
+partition models over multiple devices, from plain PyTorch to libraries
+like deepspeed.</p><p>😴 Lazy blog - just a link to the talk's <a target="_blank" href="/assets/files/2021-02-12-deck-72c8ab0e8dedb0d88d81f51b8b88f308.pdf">📋PDF</a>.</p>]]></content>
+        <author>
+            <name>Amin Saied</name>
+            <uri>https://github.com/aminsaied</uri>
+        </author>
+        <category label="talk" term="talk"/>
+        <category label="nlp" term="nlp"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[✨Talk: GPT-1 and GPT-2 Review]]></title>
+        <id>/2021/01/15/gpt1-gpt2</id>
+        <link href="https://aminsaied.github.io/blog/2021/01/15/gpt1-gpt2"/>
+        <updated>2021-01-15T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Abstract. In this talk we'll review the GPT-1 paper]]></summary>
+        <content type="html"><![CDATA[<p><strong>Abstract.</strong> In this talk we'll review the GPT-1 paper
+<a href="https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf" target="_blank" rel="noopener noreferrer">Improving Language Understanding by Generative Pre-Training - Radford et al</a>.
+By way of setting the stage we will give a brief review of the
+Transformer architecture.</p><p>Note: We didn't have time to cover GPT-2 in this talk, but some slides on the topic made it into the deck.</p><p>😴 Lazy blog - just a link to the talk's <a target="_blank" href="/assets/files/2021-01-15-deck-926c72d51bf5964cd56b842966c215d1.pdf">📋PDF</a>.</p>]]></content>
+        <author>
+            <name>Amin Saied</name>
+            <uri>https://github.com/aminsaied</uri>
+        </author>
+        <category label="talk" term="talk"/>
+        <category label="nlp" term="nlp"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[✨Talk: Introduction to 🤗Hugging Face]]></title>
+        <id>/2020/12/18/intro-to-huggingface</id>
+        <link href="https://aminsaied.github.io/blog/2020/12/18/intro-to-huggingface"/>
+        <updated>2020-12-18T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Abstract. In this talk we'll review the 🤗Hugging Face Transformers]]></summary>
+        <content type="html"><![CDATA[<p><strong>Abstract.</strong> In this talk we'll review the 🤗Hugging Face Transformers
+library. This is an open-source library with the stated goal to "democratize
+NLP". We'll briefly review some background, explain what problems Huggingface
+is trying to address, and cover some of the tools and techniques they provide.
+We will not assume any familiarity with transformers.</p><p>😴 Lazy blog - just a link to the talk's <a target="_blank" href="/assets/files/2020-12-18-deck-5cd1b7aba1eed9f288819581300e8226.pdf">📋PDF</a>.</p>]]></content>
+        <author>
+            <name>Amin Saied</name>
+            <uri>https://github.com/aminsaied</uri>
+        </author>
+        <category label="talk" term="talk"/>
+        <category label="nlp" term="nlp"/>
+    </entry>
+</feed>
