@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkaminsaied=self.webpackChunkaminsaied||[]).push([[1713],{3457:l=>{l.exports=JSON.parse('[{"label":"talk","permalink":"/blog/tags/talk","count":6},{"label":"nlp","permalink":"/blog/tags/nlp","count":5},{"label":"gnn","permalink":"/blog/tags/gnn","count":1},{"label":"intro","permalink":"/blog/tags/intro","count":1}]')}}]);
