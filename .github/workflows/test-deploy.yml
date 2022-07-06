@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: 16.x
           cache: yarn
+          # adding cache-dependency-path to avoid build error where
+          # yarn.lock is not found
           cache-dependency-path: perfanalytics-api/package-lock.json
 
       - name: Install dependencies
