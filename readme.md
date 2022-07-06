@@ -5,7 +5,7 @@
 Manual deployment
 
 ```bash
-GIT_USER=<GITHUB_USERNAME> USE_SSH=true DEPLOYMENT_BRANCH="gh_deploy" yarn deploy
+GIT_USER=<GITHUB_USERNAME> USE_SSH=true DEPLOYMENT_BRANCH="gh-pages" yarn deploy
 ```
 
 ## Setup
@@ -13,7 +13,7 @@ GIT_USER=<GITHUB_USERNAME> USE_SSH=true DEPLOYMENT_BRANCH="gh_deploy" yarn deplo
 - [ ] TODO: Make a setup page which details how the webpage is setup. Notes below.
 - [x] Set up github action to deploy.
   - See https://docusaurus.io/docs/deployment#triggering-deployment-with-github-actions
-- [ ] TODO: Add KaTeX
+- [x] TODO: Add KaTeX
   - See https://docusaurus.io/docs/markdown-features/math-equations#configuration
 - [x] TODO: Migrate dsref docs
 - [ ] TODO: Add search index
