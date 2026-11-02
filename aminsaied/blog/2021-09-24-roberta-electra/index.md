@@ -1,5 +1,6 @@
 ---
 title: '✨Talk: Roberta and Electra'
+description: 'An overview of RoBERTa and ELECTRA, two transformer-based models for natural language processing.'
 authors:
   - aminsaied
 tags:

@@ -1,5 +1,6 @@
 ---
 title: '✨Talk: Introduction to 🤗Hugging Face'
+description: 'An introduction to Hugging Face Transformers: the background, tools, and techniques for working with transformer models.'
 authors:
   - aminsaied
 tags:

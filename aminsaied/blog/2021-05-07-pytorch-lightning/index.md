@@ -1,5 +1,6 @@
 ---
 title: '✨Talk: Introduction to PyTorch Lightning'
+description: 'A hands-on guide to training a GPT-2 model using Hugging Face and PyTorch Lightning.'
 authors:
   - aminsaied
 tags:

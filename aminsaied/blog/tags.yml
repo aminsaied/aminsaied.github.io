@@ -1,0 +1,12 @@
+talk:
+  label: Talk
+nlp:
+  label: NLP
+gnn:
+  label: Graph neural networks
+intro:
+  label: Introduction
+reinforcement-learning:
+  label: Reinforcement learning
+lean:
+  label: Lean

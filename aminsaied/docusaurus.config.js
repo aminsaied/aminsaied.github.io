@@ -1,121 +1,101 @@
 // @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-const math = require('remark-math');
-const katex = require('rehype-katex');
+import {themes as prismThemes} from 'prism-react-renderer';
+import math from 'remark-math';
+import katex from 'rehype-katex';
+
+const isPreview = process.env.SITE_PREVIEW === 'true';
+const mathOptions = {strict: 'error'};
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Amin Saied',
-  tagline: 'Its my webpage!',
+  tagline: 'Machine learning, verifiable rewards, and mathematics.',
   url: 'https://aminsaied.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.svg',
-
   organizationName: 'aminsaied',
   projectName: 'aminsaied.github.io',
   trailingSlash: false,
-
+  noIndex: isPreview,
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
   },
-
   presets: [
     [
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-          remarkPlugins: [math],
-          rehypePlugins: [katex],
-        },
+        // Keep the old source notes in Git, but do not publish their routes.
+        docs: false,
         blog: {
+          blogTitle: 'Blog',
+          blogDescription: 'Notes on machine learning, verifiable rewards, and mathematics.',
+          blogSidebarCount: 0,
+          postsPerPage: 10,
           showReadingTime: true,
+          exclude: [
+            '**/_*.{js,jsx,ts,tsx,md,mdx}',
+            '**/_*/**',
+            ...(isPreview ? [] : ['**/preview/**']),
+          ],
           remarkPlugins: [math],
-          rehypePlugins: [katex],
+          rehypePlugins: [[katex, mathOptions]],
+          onInlineTags: 'throw',
+          onUntruncatedBlogPosts: 'throw',
+        },
+        pages: {
+          remarkPlugins: [math],
+          rehypePlugins: [[katex, mathOptions]],
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: [
+            require.resolve('katex/dist/katex.min.css'),
+            require.resolve('./src/css/custom.css'),
+          ],
         },
       }),
     ],
   ],
-
-  stylesheets: [
-    {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
-      type: 'text/css',
-      integrity:
-        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
-      crossorigin: 'anonymous',
-    },
-  ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      colorMode: {
+        defaultMode: 'light',
+        respectPrefersColorScheme: true,
+      },
+      announcementBar: isPreview
+        ? {
+            id: 'redesign-preview',
+            content: 'Design preview &middot; Some copy is unfinished. Sample articles are not published work.',
+            isCloseable: false,
+          }
+        : undefined,
       navbar: {
         title: 'Amin Saied',
-        logo: {
-          alt: 'That is me!',
-          src: 'img/logo.svg',
-        },
         items: [
-          {to: '/blog', label: 'Blog', position: 'left'},
-          {to: '/docs/dsref', label: 'DS Ref', position: 'left'},
-          {
-            href: 'https://github.com/aminsaied/',
-            label: 'GitHub',
-            position: 'right',
-          },
+          {to: '/', label: 'Home', position: 'right', activeBaseRegex: '^/$'},
+          {to: '/blog', label: 'Blog', position: 'right'},
+          {to: '/publications', label: 'Publications', position: 'right'},
         ],
       },
       footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
-            ],
-          },
-        ],
+        style: 'light',
+        copyright: `&copy; ${new Date().getFullYear()} Amin Saied &middot; Built with care and Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
+        additionalLanguages: ['bash', 'python'],
       },
     }),
 };
 
-module.exports = config;
+export default config;

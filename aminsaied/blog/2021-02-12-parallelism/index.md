@@ -1,5 +1,6 @@
 ---
 title: '✨Talk: Pipeline Model Parallelism'
+description: 'How to partition models across multiple devices, from PyTorch to DeepSpeed.'
 authors:
   - aminsaied
 tags:

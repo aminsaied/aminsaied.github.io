@@ -1,0 +1,103 @@
+---
+title: "Verifiable rewards, from a simple example"
+description: "A layout sample exploring a binary reward, a learning objective, and the difference between checking a proof and choosing a problem."
+slug: preview/verifiable-rewards
+authors: []
+tags: [reinforcement-learning, lean]
+preview: true
+---
+
+:::note Design preview, not a published article
+
+This is sample copy for reviewing the reading experience, mathematical
+typesetting, and code blocks. It is not a description of a particular
+training system or a report of research results.
+
+:::
+
+Some tasks come with a particularly useful property: a candidate answer can
+be checked. For a formal proof, that check can be delegated to a proof
+assistant. This gives us a simple place to start thinking about a reward.
+
+<!-- truncate -->
+
+## A reward we can check
+
+Let $x$ be a formal statement and $y$ a candidate proof. Write $V(x,y)$ for
+a verifier that returns one when the proof is accepted and zero otherwise.
+A binary reward is then
+
+$$
+r(x,y) =
+\begin{cases}
+1, & \text{if the verifier accepts } y \text{ as a proof of } x,\\
+0, & \text{otherwise.}
+\end{cases}
+$$
+
+This is deliberately a small example. A real verification pipeline must
+also decide which axioms are permitted, reject unfinished proofs, and
+specify how resource limits and failures are handled.
+
+## From a check to an objective
+
+Suppose problems are drawn from a distribution $\mathcal{D}$ and candidate
+proofs from a model $\pi_\theta$. One objective is the expected reward:
+
+$$
+\begin{aligned}
+J(\theta)
+  &= \mathbb{E}_{x \sim \mathcal{D}}
+     \mathbb{E}_{y \sim \pi_\theta(\cdot \mid x)}[r(x,y)],\\
+\widehat{J}(\theta)
+  &= \frac{1}{N}\sum_{i=1}^{N}r(x_i,y_i).
+\end{aligned}
+$$
+
+The second line is a sample average for independently drawn problem/proof
+pairs. It illustrates the objective; it is not, on its own, a training algorithm.
+
+### Multiple attempts
+
+For a fixed problem, if independent attempts each succeed with probability
+$p$, the probability of at least one success in $k$ attempts is
+
+$$
+P(\text{at least one success}) = 1 - (1-p)^k.
+$$
+
+```python title="A small numerical example"
+def probability_of_success(p: float, attempts: int) -> float:
+    if not 0 <= p <= 1:
+        raise ValueError("p must be a probability")
+    if attempts < 1:
+        raise ValueError("attempts must be positive")
+    return 1 - (1 - p) ** attempts
+
+
+print(probability_of_success(0.2, 4))  # 0.5904
+```
+
+The independence assumption matters: repeatedly generating the same failed
+proof does not create four independent opportunities to solve the problem.
+
+## Verification is not specification
+
+> A verifier can check the formal statement we supplied. It cannot tell us
+> whether that was the statement we intended to ask.
+
+This separates two questions that are easy to conflate:
+
+| Question | What needs attention |
+| --- | --- |
+| Is this proof accepted? | The verifier, allowed axioms, and execution environment. |
+| Is this a useful training problem? | The statement, assumptions, difficulty, and dataset composition. |
+
+A scalable dataset needs both. The mathematical guarantee is valuable,
+but it lives inside a larger process for deciding what to measure and learn.
+
+## Further reading
+
+The [Lean language reference](https://lean-lang.org/doc/reference/latest/)
+is a useful starting point for the formal system. Future posts can build
+on this format with longer derivations, figures, and worked examples.

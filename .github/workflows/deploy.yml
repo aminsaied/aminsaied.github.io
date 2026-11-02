@@ -5,6 +5,13 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
 jobs:
   deploy:
     name: Deploy to GitHub Pages
@@ -13,13 +20,13 @@ jobs:
       run:
         working-directory: aminsaied
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
         with:
-          node-version: 16.x
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
           cache: yarn
-          # adding cache-dependency-path to avoid build error where
-          # yarn.lock is not found
           cache-dependency-path: aminsaied/yarn.lock
 
       - name: Install dependencies
@@ -27,13 +34,11 @@ jobs:
       - name: Build website
         run: yarn build
 
-      # Popular action to deploy to GitHub Pages:
-      # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
-          publish_dir: ./build
+          publish_dir: ./aminsaied/build
           user_name: aminsaied
           user_email: amin.saied@gmail.com

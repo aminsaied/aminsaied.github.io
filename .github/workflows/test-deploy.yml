@@ -1,11 +1,16 @@
 name: Test deployment
 
 on:
+  push:
+    branches:
+      - staging/redesign
   pull_request:
     branches:
       - main
-    # Review gh actions docs if you want to further define triggers, paths, etc
-    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
+      - staging/redesign
+
+permissions:
+  contents: read
 
 jobs:
   test-deploy:
@@ -13,18 +18,20 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: website
+        working-directory: aminsaied
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
         with:
-          node-version: 16.x
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
           cache: yarn
-          # adding cache-dependency-path to avoid build error where
-          # yarn.lock is not found
-          cache-dependency-path: perfanalytics-api/package-lock.json
+          cache-dependency-path: aminsaied/yarn.lock
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Test build website
-        run: yarn build
+      - name: Check production build
+        run: yarn check:production
+      - name: Check preview build
+        run: yarn check:preview

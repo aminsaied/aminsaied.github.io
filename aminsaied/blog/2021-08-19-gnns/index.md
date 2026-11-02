@@ -1,5 +1,6 @@
 ---
 title: '✨Talk: Graph Neural Networks'
+description: 'A gentle introduction to graph neural networks, attention mechanisms, and PyTorch Geometric.'
 authors:
   - aminsaied
 tags:

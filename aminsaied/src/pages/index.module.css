@@ -1,23 +1,239 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.home {
+  width: min(100% - 3rem, 1024px);
+  margin: 0 auto;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
-}
-
-.buttons {
-  display: flex;
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
   align-items: center;
-  justify-content: center;
+  gap: 5rem;
+  padding: 4rem 0 3.8rem;
+}
+
+.name {
+  font-size: clamp(3rem, 6vw, 4rem);
+  letter-spacing: -0.045em;
+  margin: 0.6rem 0 1.4rem;
+}
+
+.lead {
+  max-width: 32rem;
+  font-size: 1.3rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.bio {
+  color: var(--site-muted);
+  max-width: 36rem;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.6rem;
+  padding-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.socials a {
+  white-space: nowrap;
+}
+
+.socials span {
+  margin-left: 0.25rem;
+}
+
+.portrait {
+  margin: 0;
+  transform: rotate(2deg);
+}
+
+.portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  background: var(--site-surface);
+  border: 1px solid var(--site-border);
+}
+
+.portrait figcaption {
+  margin-top: 1.2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--site-muted);
+  transform: rotate(-2deg);
+}
+
+.work {
+  border-top: 1px solid var(--site-border);
+  padding-top: 2.7rem;
+}
+
+.sectionHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2.3rem;
+}
+
+.sectionHeading h2 {
+  margin-bottom: 0;
+  font-size: 2rem;
+}
+
+.sectionHeading p {
+  color: var(--site-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.role {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 2rem;
+  margin: 0;
+  padding: 0 0 2.7rem;
+}
+
+.role + .role {
+  padding-top: 2rem;
+  border-top: 1px solid var(--site-border);
+}
+
+.period {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.7rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--site-muted);
+  padding-top: 0.35rem;
+}
+
+.current {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.75rem;
+  color: var(--site-green);
+}
+
+.current::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.role h3 {
+  font-family: var(--ifm-font-family-base);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.team {
+  color: var(--ifm-color-primary);
+  font-size: 0.95rem;
+  margin-bottom: 0.85rem;
+}
+
+.description {
+  max-width: 40rem;
+  margin-bottom: 0;
+  color: var(--site-muted);
+}
+
+.earlier {
+  margin: 0 0 2.8rem;
+}
+
+.explore {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3rem;
+  padding: 2.5rem 0 4.5rem;
+  border-top: 1px solid var(--site-border);
+}
+
+.explore a {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  color: var(--site-muted);
+  font-size: 0.9rem;
+}
+
+.explore a:hover {
+  text-decoration: none;
+}
+
+.explore a:hover .exploreTitle {
+  color: var(--ifm-color-primary);
+}
+
+.exploreTitle {
+  display: flex;
+  gap: 1.5rem;
+  font-family: var(--site-serif);
+  font-size: 1.65rem;
+  color: var(--ifm-heading-color);
+}
+
+@media (max-width: 700px) {
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0 3rem;
+  }
+
+  .portrait {
+    grid-row: 1;
+    width: 130px;
+    transform: none;
+  }
+
+  .portrait figcaption {
+    display: none;
+  }
+
+  .sectionHeading {
+    display: block;
+  }
+
+  .sectionHeading p {
+    margin-top: 0.6rem;
+  }
+
+  .role {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .period {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .explore {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-bottom: 3rem;
+  }
 }

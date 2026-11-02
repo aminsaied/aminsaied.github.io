@@ -1,30 +1,359 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
-
-/* You can override the default Infima variables here. */
-:root {
-  --ifm-color-primary: #852e3b;
-  --ifm-color-primary-dark: #78294e;
-  --ifm-color-primary-darker: #71273e;
-  --ifm-color-primary-darkest: #5d2038;
-  --ifm-color-primary-light: #923366;
-  --ifm-color-primary-lighter: rgb(153, 53, 106);
-  --ifm-color-primary-lightest: #ad3c76;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+:root,
+:root[data-theme='light'] {
+  --ifm-color-primary: #813d4b;
+  --ifm-color-primary-dark: #743743;
+  --ifm-color-primary-darker: #6e3440;
+  --ifm-color-primary-darkest: #5a2b35;
+  --ifm-color-primary-light: #8e4353;
+  --ifm-color-primary-lighter: #944656;
+  --ifm-color-primary-lightest: #a74f62;
+  --ifm-background-color: #faf9f6;
+  --ifm-background-surface-color: #faf9f6;
+  --ifm-font-color-base: #2e322f;
+  --ifm-heading-color: #252b27;
+  --ifm-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ifm-font-family-monospace: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --ifm-font-size-base: 17px;
+  --ifm-line-height-base: 1.75;
+  --ifm-heading-font-weight: 400;
+  --ifm-heading-line-height: 1.2;
+  --ifm-navbar-height: 4.25rem;
+  --ifm-navbar-background-color: var(--ifm-background-color);
+  --ifm-navbar-shadow: none;
+  --ifm-footer-background-color: var(--ifm-background-color);
+  --ifm-code-font-size: 85%;
+  --ifm-code-background: #eeece7;
+  --ifm-global-radius: 5px;
+  --ifm-container-width: 1120px;
+  --ifm-container-width-xl: 1120px;
+  --ifm-link-decoration: none;
+  --site-serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  --site-muted: #62685f;
+  --site-border: #dedfd7;
+  --site-surface: #f0efe9;
+  --site-green: #40674d;
+  --docusaurus-highlighted-code-line-bg: rgba(129, 61, 75, 0.08);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+:root[data-theme='dark'] {
+  --ifm-color-primary: #e2a4af;
+  --ifm-color-primary-dark: #db8d9b;
+  --ifm-color-primary-darker: #d88291;
+  --ifm-color-primary-darkest: #cd6073;
+  --ifm-color-primary-light: #e9bbc3;
+  --ifm-color-primary-lighter: #ecc6cd;
+  --ifm-color-primary-lightest: #f7e8eb;
+  --ifm-background-color: #1c211e;
+  --ifm-background-surface-color: #252c27;
+  --ifm-font-color-base: #dedfd6;
+  --ifm-heading-color: #f0f0e9;
+  --ifm-code-background: #2b342e;
+  --site-muted: #a8b1a7;
+  --site-border: #3a443c;
+  --site-surface: #252c27;
+  --site-green: #a1c6a9;
+  --docusaurus-highlighted-code-line-bg: rgba(226, 164, 175, 0.12);
+}
+
+html {
+  scroll-padding-top: 6rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--site-serif);
+  letter-spacing: -0.025em;
+}
+
+a {
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 4px;
+}
+
+.navbar {
+  border-bottom: 1px solid var(--site-border);
+}
+
+.navbar__inner {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.navbar__title {
+  font-family: var(--site-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.navbar__link {
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.navbar__link--active {
+  text-decoration: underline;
+  text-underline-offset: 0.45em;
+}
+
+div[class*='announcementBar_'] {
+  background: var(--site-surface);
+  color: var(--site-muted);
+  border-bottom: 1px solid var(--site-border);
+  font-size: 0.72rem;
+}
+
+.footer {
+  border-top: 1px solid var(--site-border);
+  padding: 1.7rem 1.5rem;
+}
+
+.footer__copyright {
+  color: var(--site-muted);
+  font-size: 0.75rem;
+}
+
+.eyebrow {
+  color: var(--site-muted);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.67rem;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.draft-note {
+  color: var(--site-muted);
+  font-size: 0.8rem;
+  font-style: italic;
+  margin: 0.8rem 0 0;
+}
+
+.page-heading {
+  padding: 4rem 0 2.5rem;
+}
+
+.page-heading h1 {
+  font-size: clamp(2.6rem, 6vw, 3.6rem);
+  margin: 0.7rem 0 1.3rem;
+}
+
+.page-heading > p:last-child {
+  max-width: 37rem;
+  color: var(--site-muted);
+  font-size: 1.05rem;
+  margin-bottom: 0;
+}
+
+.blog-index-page,
+.publications-page {
+  width: min(100% - 3rem, 820px);
+  margin: 0 auto;
+  padding-bottom: 4rem;
+}
+
+.publications-route main {
+  margin: 0 auto;
+  padding: 0;
+}
+
+.publications-route main > .row {
+  margin: 0;
+  max-width: none;
+}
+
+.publications-route main > .row > .col {
+  padding: 0;
+}
+
+.post-list {
+  padding: 0;
+  margin: 0 0 2rem;
+  list-style: none;
+}
+
+.post-list > li {
+  margin: 0;
+  border-top: 1px solid var(--site-border);
+}
+
+.post-summary {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+.post-summary > time {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.7rem;
+  color: var(--site-muted);
+  padding-top: 0.4rem;
+}
+
+.post-summary h2 {
+  font-size: 1.65rem;
+  line-height: 1.3;
+  margin: 0 0 0.7rem;
+}
+
+.post-summary h2 a {
+  color: var(--ifm-heading-color);
+}
+
+.post-summary h2 a:hover {
+  color: var(--ifm-color-primary);
+}
+
+.post-summary p {
+  color: var(--site-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+
+.post-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  font-size: 0.72rem;
+}
+
+.preview-label {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  color: var(--site-green);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.publication {
+  padding: 2rem 0;
+  border-top: 1px solid var(--site-border);
+}
+
+.publication h2 {
+  font-size: 1.55rem;
+  line-height: 1.35;
+  margin: 0.6rem 0 0.8rem;
+}
+
+.publication h2 a {
+  color: var(--ifm-heading-color);
+}
+
+.publication h2 a:hover {
+  color: var(--ifm-color-primary);
+}
+
+.publication p {
+  margin-bottom: 0.5rem;
+}
+
+.publication .authors {
+  color: var(--site-muted);
+  font-size: 0.85rem;
+}
+
+.publication .publication-summary {
+  font-style: italic;
+}
+
+.publication .publication-links {
+  font-size: 0.8rem;
+  margin-top: 0.85rem;
+}
+
+.theme-blog-post-page > div > .container {
+  margin-top: 3rem !important;
+}
+
+.theme-blog-post-page article header h1 {
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  margin-bottom: 1.3rem;
+}
+
+.theme-blog-post-page .markdown {
+  margin-top: 2rem;
+}
+
+.markdown > h2 {
+  font-size: 1.9rem;
+  margin-top: 2.8rem;
+}
+
+.markdown > h3 {
+  font-size: 1.45rem;
+}
+
+.markdown pre {
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.markdown blockquote {
+  color: var(--site-muted);
+  border-left: 2px solid var(--ifm-color-primary);
+  background: var(--site-surface);
+  padding: 1rem 1.4rem;
+}
+
+.katex {
+  font-size: 1.08em;
+}
+
+.katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem 0.2rem;
+  margin: 1.5rem 0;
+}
+
+.alert {
+  --ifm-alert-background-color: var(--site-surface);
+  --ifm-alert-border-color: var(--site-border);
+  --ifm-alert-foreground-color: var(--ifm-font-color-base);
+  --ifm-alert-border-left-width: 2px;
+  box-shadow: none;
+  font-size: 0.9rem;
+}
+
+.pagination-nav__link {
+  border-color: var(--site-border);
+  border-radius: 0;
+}
+
+.table-of-contents {
+  font-size: 0.75rem;
+}
+
+@media (max-width: 700px) {
+  .page-heading {
+    padding-top: 2.5rem;
+  }
+
+  .post-summary {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .post-summary h2 {
+    font-size: 1.5rem;
+  }
+
+  .blog-index-page,
+  .publications-page {
+    padding-bottom: 2.5rem;
+  }
+
+  .theme-blog-post-page article header h1 {
+    font-size: 2.2rem;
+  }
 }
