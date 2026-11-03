@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {existsSync, readFileSync, readdirSync} from 'node:fs';
-import {join} from 'node:path';
+import {basename, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const mode = process.argv[2];
@@ -23,6 +24,7 @@ const home = readPage('/');
 const blog = readPage('/blog');
 const publications = readPage('/publications');
 const sampleRoute = '/blog/preview/verifiable-rewards';
+const compositionRoute = '/blog/preview/composition-factors';
 const leanRoute = '/blog/lean-formal-proofs';
 const legacyPosts = [
   '/blog/2020/12/18/intro-to-huggingface',
@@ -32,7 +34,6 @@ const legacyPosts = [
   '/blog/2021/08/19/gnns',
   '/blog/2021/09/24/roberta-electra',
 ];
-
 assert.ok(home.includes('Member of Technical Staff'), 'The current role is missing');
 assert.ok(home.includes('Science Lead'), 'The previous role is missing');
 assert.ok(
@@ -153,12 +154,70 @@ assert.ok(fonts.some((font) => font.startsWith('KaTeX_') && font.endsWith('.woff
 
 const sampleExists = existsSync(join(build, `${sampleRoute.slice(1)}.html`));
 assert.equal(sampleExists, mode === 'preview', 'Sample article isolation failed');
+assert.equal(
+  existsSync(join(build, `${compositionRoute.slice(1)}.html`)),
+  mode === 'preview',
+  'Composition-factors editorial draft isolation failed',
+);
+
+const coefficients = JSON.parse(readFileSync(
+  new URL('../src/components/CompositionFactors/coefficients.json', import.meta.url),
+  'utf8',
+));
+assert.equal(coefficients.degree, 14);
+assert.equal(coefficients.rows, 'lambda');
+assert.equal(coefficients.columns, 'mu');
+assert.equal(coefficients.partitions.length, 507);
+assert.equal(coefficients.matrix.length, 507);
+assert.ok(coefficients.matrix.every(
+  (row) => row.length === 507 && row.every((value) => Number.isSafeInteger(value) && value >= 0),
+), 'The coefficient matrix must contain 257,049 exact nonnegative integers');
+assert.equal(
+  createHash('sha256').update(JSON.stringify(coefficients.matrix)).digest('hex'),
+  coefficients.matrixSha256,
+  'The coefficient data changed without updating its provenance checksum',
+);
+
+const baseline = JSON.parse(readFileSync(
+  new URL('../src/components/CompositionFactors/degree-five.json', import.meta.url),
+  'utf8',
+));
+const baselinePartitions = coefficients.partitions.filter(
+  (partition) => partition.reduce((sum, part) => sum + part, 0) <= 5,
+);
+assert.equal(baselinePartitions.length, 18);
+assert.deepEqual(baseline, {
+  partitions: baselinePartitions,
+  matrix: coefficients.matrix.slice(0, 18).map((row) => row.slice(0, 18)),
+}, 'The static degree-five data must be an exact subset of the full table');
+
+const coefficientBundles = filesIn(join(build, 'assets/js')).filter((file) =>
+  file.endsWith('.js') && readFileSync(file, 'utf8').includes(coefficients.matrixSha256),
+);
+assert.equal(
+  coefficientBundles.length,
+  mode === 'preview' ? 1 : 0,
+  'The coefficient data must occur once in preview assets and never in production assets',
+);
+if (mode === 'preview') {
+  assert.match(
+    basename(coefficientBundles[0]),
+    /^composition-figures\.[^.]+\.js$/,
+    'The dataset must live in the on-demand figure bundle, not an article or excerpt bundle',
+  );
+}
 
 for (const file of filesIn(build).filter((file) => /\.(html|xml)$/.test(file))) {
   const content = readFileSync(file, 'utf8');
   assert.doesNotMatch(content, /class="katex-error"/, `Math rendering failed: ${file}`);
+  assert.doesNotMatch(
+    content,
+    /(?:src|href)="[^"]*\/composition-figures\.[^"]+\.js"/,
+    `The figure bundle must not be eagerly loaded or prefetched by ${file}`,
+  );
   if (mode === 'production') {
     assert.ok(!content.includes(sampleRoute), `Preview content leaked into ${file}`);
+    assert.ok(!content.includes(compositionRoute), `Editorial draft leaked into ${file}`);
   }
   if (file.endsWith('.html')) {
     const noIndex = /<meta\b(?=[^>]*name="robots")(?=[^>]*content="[^"]*noindex)[^>]*>/;
@@ -175,8 +234,150 @@ if (mode === 'preview') {
   assert.ok((sample.match(/class="katex"/g) ?? []).length >= 10);
   assert.ok((sample.match(/class="katex-display"/g) ?? []).length >= 3);
   assert.match(sample, /application\/x-tex/, 'Accessible math output is missing');
+
+  const composition = readPage(compositionRoute);
+  assert.ok(blog.includes(`href="${compositionRoute}"`), 'The editorial draft is absent from the preview blog');
+  assert.match(blog, /Editorial draft/);
+  assert.match(composition, /Member of Technical Staff, Microsoft AI/);
+  assert.doesNotMatch(composition, /ML Engineer, Microsoft|Editorial draft for review/);
+  assert.equal(
+    composition.match(/<h2\b[^>]*\bid="([^"]+)"/)?.[1],
+    'plethysms-afoot',
+    'The first section must introduce plethysm after the narrative opening',
+  );
+  assert.match(composition, /In 2017, my advisor asked me/);
+  assert.match(composition, /id="roll-up-your-sleeves"/);
+  assert.match(composition, /Unpacking that structure turned out to be at the heart of my thesis/);
+  assert.match(composition, /data-footnote-ref/, 'The opening must link to the thesis footnote');
+  assert.match(composition, /1711\.04326#page=6/, 'The major-index rule needs its reference');
+  assert.doesNotMatch(composition, /\\(?:boxed|fbox|fcolorbox)\b/, 'Article equations must not be boxed');
+  const footnotesIndex = composition.indexOf('data-footnotes');
+  assert.ok(footnotesIndex >= 0, 'The article footnotes are missing');
+  const articleBody = composition.slice(0, footnotesIndex);
+  const footnotes = composition.slice(footnotesIndex);
+  assert.ok(
+    (footnotes.match(/class="katex-display"/g) ?? []).length >= 2,
+    'The Lie-character and degree-bound footnote equations must render as math',
+  );
+  for (const detail of [
+    /characteristic zero/,
+    /universal Schur-functor multiplicities/,
+    /The major index is/,
+  ]) {
+    assert.doesNotMatch(articleBody, detail, 'Supporting conventions must not interrupt the main exposition');
+    assert.match(footnotes, detail, 'The technical detail must remain available in a footnote');
+  }
+  const motivationIndex = composition.indexOf('Johnson homomorphism');
+  assert.ok(
+    motivationIndex >= 0 && motivationIndex < composition.indexOf('id="plethysms-afoot"'),
+    'The narrative introduction must precede the coefficient definition',
+  );
+  assert.deepEqual(
+    [...composition.matchAll(/data-composition-figure="([^"]+)"/g)].map(([, name]) => name),
+    ['baseline', 'cartoon', 'atlas', 'puzzle', 'stability'],
+    'The static figures and three interactive placeholders must render in narrative order',
+  );
+  const baselineFigure = composition.match(
+    /<figure\b[^>]*data-composition-figure="baseline"[\s\S]*?<\/figure>/,
+  )?.[0];
+  assert.ok(baselineFigure, 'The degree-five figure must render on the server');
+  assert.doesNotMatch(baselineFigure, /<(?:canvas|button|input|select)\b/, 'The baseline must be static');
+  assert.deepEqual(
+    [...baselineFigure.matchAll(/data-coefficient="(\d+),(\d+),(\d+)"/g)]
+      .map((match) => match.slice(1).map(Number)),
+    baseline.matrix.flatMap((row, i) => row.flatMap((value, j) => value ? [[i, j, value]] : [])),
+    'The static matrix must render every nonzero value at the correct row and column',
+  );
+  const efficiencyIndex = composition.indexOf('The key insight to improve');
+  const cartoonIndex = composition.indexOf('data-composition-figure="cartoon"');
+  const cartoon = composition.match(
+    /<figure\b[^>]*data-composition-figure="cartoon"[\s\S]*?<\/figure>/,
+  )?.[0];
+  assert.ok(cartoon, 'The decomposition cartoon must render on the server');
+  assert.doesNotMatch(cartoon, /<(?:canvas|button|input|select)\b|Figure 0/, 'The cartoon must be static and unnumbered');
+  assert.doesNotMatch(cartoon, /&amp;ell;/, 'Lie-piece labels must render the script ell symbol');
+  assert.deepEqual(
+    [...cartoon.matchAll(/data-puzzle-step="([^"]+)"/g)].map(([, step]) => step),
+    ['decompose', 'pair', 'degree', 'assemble'],
+  );
+  const lieCatalogue = baseline.partitions.flatMap((partition, i) =>
+    Array.from({length: baseline.matrix[i][0]}, () => partition.join(',')),
+  );
+  assert.equal(lieCatalogue.length, 10);
+  assert.deepEqual(
+    [...cartoon.matchAll(/data-lie-catalogue-piece="([^"]+)"/g)].map(([, partition]) => partition),
+    lieCatalogue,
+    'The catalogue must show every Lie piece through degree five in paper order',
+  );
+  assert.equal((cartoon.match(/data-selected="true"/g) ?? []).length, 2);
+  assert.deepEqual(
+    [...cartoon.matchAll(/data-lie-piece="(\d+)" data-selected="true"/g)].map(([, id]) => Number(id)),
+    [1, 2],
+    'The paper example must select the first two Lie pieces from the catalogue',
+  );
+  assert.deepEqual(
+    [...cartoon.matchAll(/data-puzzle-pair="([^"]+)"/g)].map(([, pair]) => pair),
+    ['2|1,1', '1|1'],
+  );
+  assert.match(cartoon, /data-degree-total="5" data-degree-compatible="true"/);
+  assert.match(cartoon, /data-degree-total="4" data-degree-compatible="false"/);
+  assert.match(cartoon, /Reject for degree 5/);
+  assert.deepEqual(
+    [...cartoon.matchAll(/data-puzzle-output="([^"]+)"/g)].map(([, partition]) => partition),
+    ['3,2', '2,2,1', '2,1,1,1', '1,1,1,1,1'],
+  );
+  assert.equal((cartoon.match(/data-puzzle-target="true"/g) ?? []).length, 1);
+  assert.match(cartoon, /data-puzzle-output="3,2" data-puzzle-target="true"/);
+  assert.match(cartoon, /contributes 1 to/);
+  assert.match(cartoon, /1711\.04326#page=10/);
+  assert.match(composition, /1711\.04326#page=13/);
+  assert.ok(
+    efficiencyIndex < cartoonIndex && cartoonIndex < composition.indexOf('At the level of'),
+    'The cartoon must immediately follow the paragraph introducing decomposition puzzles',
+  );
+  assert.ok(
+    composition.indexOf('data-composition-figure="baseline"') < efficiencyIndex &&
+      efficiencyIndex < composition.indexOf('data-composition-loader="atlas"'),
+    'The efficiency discussion must separate the static and interactive matrices',
+  );
+  assert.match(composition, /strictly below the diagonal/);
+  assert.match(
+    composition,
+    /compared with the original 324\.<\/p>\s*<p>Visualizing these expanded coefficients/,
+    'The block-stability paragraph must immediately follow the expanded computation',
+  );
+  const patternIndex = composition.indexOf('Visualizing these expanded coefficients');
+  const guidesIndex = composition.indexOf('<strong>Show degree boundaries</strong>');
+  assert.ok(
+    patternIndex < guidesIndex && guidesIndex < composition.indexOf('data-composition-loader="atlas"'),
+    'The pattern and degree-boundary guidance must introduce the interactive matrix',
+  );
+  assert.match(footnotes, /https:\/\/arxiv\.org\/abs\/1204\.4533/, 'The FI-modules connection needs its citation');
+  assert.doesNotMatch(composition, /including\s+zeros/i);
+  assert.deepEqual(
+    [...composition.matchAll(/data-composition-loader="([^"]+)"/g)].map(([, name]) => name),
+    ['atlas', 'puzzle', 'stability', 'download'],
+    'Interactive content must load on demand',
+  );
+  assert.match(composition, /257,049/);
+  assert.match(composition, /freshly reconstructed/);
+  assert.match(composition, /Download the exact coefficient table/);
+  assert.match(composition, /id="stability-lab"/, 'The stability anchor must exist before its figure loads');
+  assert.match(
+    composition,
+    /<noscript>Enable JavaScript to use this interactive content\.<\/noscript>/,
+    'Deferred figures need a no-JavaScript explanation',
+  );
+  const figureBundle = readFileSync(coefficientBundles[0], 'utf8');
+  assert.doesNotMatch(figureBundle, /including\s+zeros/i);
+  assert.match(figureBundle, /Every point is computed, not extrapolated/);
+  assert.match(figureBundle, /Maximum coefficient degree/);
+  assert.match(figureBundle, /Show degree boundaries/);
+  assert.match(figureBundle, /data-degree-start/, 'Degree boundaries must retain their degree labels');
+  assert.match(figureBundle, /Boxes added to both first rows/);
+  assert.ok((composition.match(/class="katex"/g) ?? []).length >= 25);
 }
 
 console.log(
-  `Passed ${mode} checks: navigation, role order, 7 publications, 6 archived posts and PDFs, public Lean article and diagrams, local math fonts, and sample isolation.`,
+  `Passed ${mode} checks: navigation, role order, 7 publications, 6 archived posts and PDFs, public Lean article and diagrams, local math fonts, exact coefficient data, and preview isolation.`,
 );

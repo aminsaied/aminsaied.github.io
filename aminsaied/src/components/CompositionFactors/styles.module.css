@@ -1,0 +1,1225 @@
+.figure {
+  --cf-ink: #235d53;
+  --cf-soft: #d7e8df;
+  --cf-rose: #944b60;
+  --cf-rose-soft: #efdae0;
+  --cf-zero: #f4f1ea;
+  --cf-pruned: #e3e3da;
+  margin: 2.25rem 0 2.75rem;
+  padding: clamp(1rem, 3vw, 1.65rem);
+  background: var(--site-surface);
+  border: 1px solid var(--site-border);
+  border-radius: 8px;
+  color: var(--ifm-font-color-base);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  scroll-margin-top: 6rem;
+}
+
+.deferred {
+  scroll-margin-top: 6rem;
+}
+
+.pendingFigure {
+  min-height: 38rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pendingFigure[data-composition-figure='atlas'] {
+  min-height: 46rem;
+}
+
+.loadingMessage {
+  margin: auto;
+  padding: 2rem 0;
+  color: var(--site-muted);
+}
+
+.loadingError {
+  margin: 2.25rem 0 2.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--site-border);
+  border-radius: 8px;
+}
+
+:global([data-theme='dark']) .figure {
+  --cf-ink: #a4d5bd;
+  --cf-soft: #344e43;
+  --cf-rose: #e2a4b7;
+  --cf-rose-soft: #543c45;
+  --cf-zero: #252c27;
+  --cf-pruned: #39433c;
+}
+
+.figureHeader {
+  margin-bottom: 1.4rem;
+}
+
+.figure .eyebrow {
+  font-family: var(--ifm-font-family-monospace);
+  color: var(--site-muted);
+  font-size: 0.59rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.6rem;
+}
+
+.figureHeader h3 {
+  font-size: clamp(1.5rem, 4vw, 1.95rem);
+  line-height: 1.2;
+  margin: 0 0 0.7rem;
+}
+
+.figureHeader > p:last-child {
+  color: var(--site-muted);
+  margin: 0;
+  max-width: 35rem;
+}
+
+.baselineMatrix {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.baselineMatrix text {
+  fill: var(--site-muted);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 12px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.baselineBackground {
+  fill: var(--cf-zero);
+}
+
+.baselineGrid {
+  fill: none;
+  stroke: var(--site-border);
+  stroke-width: 0.5;
+}
+
+.baselineCell rect {
+  fill: var(--cf-soft);
+}
+
+.baselineCell text {
+  fill: var(--cf-ink);
+}
+
+.baselineDiagonal rect {
+  fill: var(--cf-rose-soft);
+}
+
+.baselineDiagonal text {
+  fill: var(--cf-rose);
+}
+
+.figure button,
+.figure select,
+.download {
+  font: inherit;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.button,
+.steps button,
+.presetButtons button,
+.smallButtons button {
+  color: var(--ifm-font-color-base);
+  background: var(--ifm-background-color);
+  border: 1px solid var(--site-border);
+  border-radius: 4px;
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.button:hover:not(:disabled),
+.steps button:hover,
+.presetButtons button:hover,
+.smallButtons button:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+.figure button:disabled,
+.download:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.figure button[aria-pressed='true'] {
+  background: var(--cf-soft);
+  color: var(--cf-ink);
+  border-color: var(--cf-ink);
+}
+
+.atlasControls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.6rem;
+  align-items: center;
+  padding-bottom: 1.4rem;
+  margin-bottom: 1.3rem;
+  border-bottom: 1px solid var(--site-border);
+}
+
+.rangeLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  font-size: 0.72rem;
+}
+
+.rangeLabel > span:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.rangeLabel strong {
+  font-variant-numeric: tabular-nums;
+  color: var(--cf-ink);
+}
+
+.rangeLabel input {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--cf-ink);
+  cursor: pointer;
+  margin: 0.4rem 0;
+}
+
+.rangeEnds {
+  display: flex;
+  justify-content: space-between;
+  color: var(--site-muted);
+  gap: 0.5rem;
+  font-size: 0.58rem;
+}
+
+.entryCount {
+  text-align: right;
+}
+
+.entryCount strong {
+  display: block;
+  color: var(--cf-ink);
+  font-family: var(--site-serif);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 5vw, 2.3rem);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.entryCount > span {
+  color: var(--site-muted);
+  font-size: 0.59rem;
+}
+
+.atlasLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 145px;
+  gap: 1.3rem;
+}
+
+.atlasLayout > *,
+.matrixAxes > * {
+  min-width: 0;
+}
+
+.matrixAxes {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-rows: 22px auto;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.57rem;
+  color: var(--site-muted);
+}
+
+.axisTop,
+.axisSide {
+  position: relative;
+}
+
+.axisTop > span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.axisTop .blockAxis {
+  left: 50%;
+  white-space: nowrap;
+}
+
+.axisSide > span {
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+.axisCorner {
+  font-size: 0.5rem;
+}
+
+.matrixFrame {
+  position: relative;
+  border: 1px solid var(--site-border);
+  background: var(--cf-zero);
+}
+
+.matrixFrame canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  cursor: crosshair;
+}
+
+.matrixDegreeGuides {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  stroke: var(--cf-rose);
+  stroke-width: 0.85;
+  stroke-opacity: 0.8;
+}
+
+.matrixSelection {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--cf-rose);
+  box-shadow: 0 0 0 1px var(--ifm-background-color);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.figure .hint {
+  color: var(--site-muted);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.66rem;
+  line-height: 1.55;
+  margin: 0.7rem 0;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  color: var(--site-muted);
+  font-size: 0.58rem;
+  margin: 0.65rem 0;
+}
+
+.zeroSwatch,
+.solidSwatch,
+.gradientSwatch {
+  display: inline-block;
+  height: 9px;
+  width: 14px;
+  border: 1px solid var(--site-border);
+}
+
+.zeroSwatch {
+  background: var(--cf-zero);
+}
+
+.gradientSwatch {
+  width: 46px;
+  margin-left: 0.5rem;
+  background: linear-gradient(to right, #b0d5ca, #124a42);
+}
+
+:global([data-theme='dark']) .gradientSwatch {
+  background: linear-gradient(to right, #3f6860, #b1e5c8);
+}
+
+.solidSwatch {
+  background: var(--cf-ink);
+  margin-left: 0.5rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 24px;
+  font-size: 0.66rem;
+  color: var(--site-muted);
+}
+
+.checkboxLabel input {
+  accent-color: var(--cf-ink);
+  flex-shrink: 0;
+}
+
+.inspector {
+  padding-top: 1.25rem;
+}
+
+.coefficient {
+  display: block;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.coefficient > span:first-child {
+  font-family: var(--site-serif);
+  font-size: 1.15rem;
+}
+
+.coefficient strong {
+  color: var(--cf-ink);
+  font-family: var(--site-serif);
+  font-size: 2.2rem;
+  font-weight: 400;
+}
+
+.partitionCard {
+  min-width: 0;
+  padding: 0.7rem 0;
+}
+
+.partitionLabel {
+  font-size: 0.67rem;
+  margin-bottom: 0.55rem;
+  color: var(--site-muted);
+}
+
+.partitionLabel > span {
+  white-space: normal;
+  color: var(--ifm-font-color-base);
+}
+
+.young {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.box {
+  fill: var(--cf-soft);
+  stroke: var(--cf-ink);
+  stroke-width: 1;
+}
+
+.addedBox {
+  fill: var(--cf-rose-soft);
+  stroke: var(--cf-rose);
+  stroke-width: 1;
+}
+
+.inspector .button {
+  width: 100%;
+  font-size: 0.65rem;
+  margin: 0.9rem 0;
+}
+
+.followLink {
+  display: block;
+  font-size: 0.68rem;
+}
+
+.selectors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0;
+}
+
+.selectLabel {
+  font-size: 0.68rem;
+  color: var(--site-muted);
+}
+
+.selectLabel select {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.35rem;
+  border: 1px solid var(--site-border);
+  border-radius: 4px;
+  color: var(--ifm-font-color-base);
+  background: var(--ifm-background-color);
+}
+
+.caption {
+  border-top: 1px solid var(--site-border);
+  margin-top: 1.3rem;
+  padding-top: 0.85rem;
+  font-size: 0.64rem;
+  color: var(--site-muted);
+  line-height: 1.65;
+}
+
+.puzzleCartoon {
+  --piece-ink: var(--site-muted);
+  --piece-soft: var(--cf-zero);
+  --lie-blue: #2c6088;
+  --lie-blue-soft: #dceaf4;
+  --lie-amber: #795823;
+  --lie-amber-soft: #f2e5c8;
+  padding: 1.15rem 0 0.85rem;
+  border-width: 1px 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+:global([data-theme='dark']) .puzzleCartoon {
+  --lie-blue: #a2c9eb;
+  --lie-blue-soft: #293f52;
+  --lie-amber: #e8c789;
+  --lie-amber-soft: #483e2c;
+}
+
+.puzzleCartoon [data-lie-piece='1'] {
+  --piece-ink: var(--lie-blue);
+  --piece-soft: var(--lie-blue-soft);
+}
+
+.puzzleCartoon [data-lie-piece='2'] {
+  --piece-ink: var(--lie-amber);
+  --piece-soft: var(--lie-amber-soft);
+}
+
+.puzzleBankHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.7rem;
+}
+
+.puzzleBankHeader h3 {
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.puzzleBankHeader > span {
+  font-size: 0.6rem;
+  color: var(--site-muted);
+}
+
+.puzzleBankGrid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--site-border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.15rem;
+}
+
+.puzzleBankPiece {
+  display: grid;
+  grid-template-rows: 1rem 62px 1rem;
+  gap: 0.25rem;
+  justify-items: center;
+  min-width: 0;
+  padding: 0.4rem 0.2rem;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--piece-ink);
+  font-size: 0.55rem;
+}
+
+.puzzleBankPiece > .young {
+  align-self: center;
+  max-height: 62px;
+}
+
+.puzzleBankPiece[data-selected='true'] {
+  background: var(--piece-soft);
+  border-color: var(--piece-ink);
+}
+
+.puzzleLie .box {
+  fill: var(--piece-soft);
+  stroke: var(--piece-ink);
+}
+
+.puzzleStrip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1.1fr) 16px minmax(0, 1.5fr);
+  gap: 0.6rem;
+  align-items: start;
+}
+
+.puzzleStep {
+  min-width: 0;
+  text-align: center;
+}
+
+.puzzleStep h3 {
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin: 0 0 0.85rem;
+}
+
+.puzzlePartition {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.3rem;
+  min-width: 0;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.55rem;
+}
+
+.puzzleSource .box,
+.puzzleParts .box,
+.puzzlePair .puzzlePartition:first-child .box,
+.puzzleOutcome .box {
+  fill: var(--cf-zero);
+  stroke: var(--site-muted);
+}
+
+.puzzleParts {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--site-muted);
+}
+
+.puzzleArrow,
+.puzzleSplitArrow {
+  color: var(--site-muted);
+  font-size: 1rem;
+}
+
+.puzzleArrow {
+  align-self: center;
+}
+
+.puzzleSplitArrow {
+  display: block;
+  margin: 0.3rem 0;
+}
+
+.puzzlePair,
+.puzzlePairLabels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr);
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.puzzlePairLabels {
+  color: var(--site-muted);
+  font-size: 0.55rem;
+}
+
+.puzzlePairLabels > :last-child {
+  grid-column: 3;
+}
+
+.puzzlePair {
+  margin-top: 0.7rem;
+  color: var(--piece-ink);
+}
+
+.puzzlePair .puzzlePartition {
+  grid-template-rows: 44px auto;
+  color: var(--site-muted);
+}
+
+.puzzlePair .young {
+  align-self: center;
+}
+
+.puzzlePair .puzzleLie {
+  color: var(--piece-ink);
+}
+
+.puzzleLink {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 2px;
+  height: 44px;
+  align-self: start;
+  font-size: 0.95rem;
+}
+
+.puzzleLink::before,
+.puzzleLink::after {
+  content: '';
+  border-top: 1px solid currentColor;
+}
+
+.puzzleTensor {
+  display: block;
+  color: var(--site-muted);
+  font-size: 0.8rem;
+  line-height: 1;
+  margin-top: 0.45rem;
+}
+
+.figure .puzzleDegreeEquation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.3rem;
+  font-family: var(--site-serif);
+  font-size: 1.15rem;
+  line-height: 1.4;
+  margin: 0.45rem 0;
+}
+
+.puzzleDegreeTerm {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.puzzleDegreeTerm strong {
+  color: var(--piece-ink);
+  font-weight: 500;
+}
+
+.puzzleDegreeCheck + .puzzleDegreeCheck {
+  border-top: 1px solid var(--site-border);
+  margin-top: 0.65rem;
+  padding-top: 0.35rem;
+}
+
+.figure .puzzleDegreeStatus {
+  margin: 0;
+  font-size: 0.55rem;
+  color: var(--cf-rose);
+}
+
+.puzzleDegreeCheck[data-degree-compatible='true'] .puzzleDegreeStatus,
+.puzzleDegreeCheck[data-degree-compatible='true'] .puzzleDegreeTotal {
+  color: var(--cf-ink);
+}
+
+.puzzleDegreeCheck[data-degree-compatible='false'] .puzzleDegreeTotal {
+  color: var(--cf-rose);
+}
+
+.puzzleAssembly {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  align-items: center;
+  gap: 0.8rem;
+  border-top: 1px solid var(--site-border);
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+}
+
+.puzzleOutputs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.puzzleOutcome {
+  padding: 0.4rem 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--site-muted);
+  text-align: center;
+}
+
+.puzzleOutcome[data-puzzle-target='true'] {
+  background: var(--cf-soft);
+  border-color: var(--cf-ink);
+  color: var(--cf-ink);
+}
+
+.puzzleOutcome[data-puzzle-target='true'] .box {
+  fill: var(--cf-soft);
+  stroke: var(--cf-ink);
+}
+
+.puzzleOutcome .puzzlePartition {
+  grid-template-rows: 90px auto;
+}
+
+.puzzleOutcome .young {
+  align-self: center;
+}
+
+.puzzleTargetLabel {
+  display: block;
+  font-size: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.figure .puzzleNote {
+  color: var(--site-muted);
+  font-size: 0.55rem;
+  margin: 0.55rem 0 0;
+}
+
+.puzzleCaption {
+  border: 0;
+  margin-top: 0.8rem;
+  padding: 0;
+  text-align: center;
+}
+
+.puzzleCaption > p {
+  margin: 0;
+}
+
+.decomposition {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1.4rem;
+  background: var(--ifm-background-color);
+  border-radius: 4px;
+}
+
+.shapeLabel {
+  margin-left: auto;
+  color: var(--site-muted);
+  font-size: 0.75rem;
+}
+
+.shapeLabel strong {
+  margin-left: 0.5rem;
+  font-family: var(--ifm-font-family-monospace);
+  color: var(--cf-ink);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.steps button {
+  font-size: 0.66rem;
+  padding: 0.7rem 0.4rem;
+}
+
+.stepNumber {
+  display: block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.56rem;
+  margin-bottom: 0.2rem;
+  opacity: 0.75;
+}
+
+.pruningLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.4rem;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.pairingGrid {
+  width: 100%;
+  max-width: 290px;
+}
+
+.pairingGrid text,
+.linePlot text {
+  fill: var(--site-muted);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 10px;
+}
+
+.candidate {
+  fill: var(--cf-ink);
+}
+
+.survivor {
+  fill: var(--cf-rose);
+}
+
+.pruned {
+  fill: var(--cf-pruned);
+}
+
+.pruningCopy > p {
+  font-size: 0.75rem;
+  color: var(--site-muted);
+}
+
+.figure .pruningCount {
+  font-family: var(--site-serif);
+  font-size: 1.5rem;
+  line-height: 1;
+  margin: 0 0 0.7rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pruningCount strong {
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: var(--cf-rose);
+}
+
+.figure .degreeEquation {
+  font-family: var(--site-serif);
+  color: var(--ifm-heading-color);
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.assembly {
+  border-top: 1px solid var(--site-border);
+  padding-top: 1rem;
+}
+
+.assemblyHeading,
+.smallButtons,
+.assemblyInput,
+.assemblyOutput,
+.presetButtons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.assemblyHeading {
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.smallButtons button {
+  font-size: 0.65rem;
+}
+
+.assemblyInput {
+  margin: 1.3rem 0;
+  gap: 0.5rem;
+  font-family: var(--site-serif);
+}
+
+.assemblyOutput {
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.term,
+.highlightedTerm {
+  padding: 0.5rem;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.highlightedTerm {
+  border-color: var(--cf-rose);
+  border-radius: 4px;
+  background: var(--ifm-background-color);
+}
+
+.term > span,
+.highlightedTerm > span {
+  font-size: 0.58rem;
+  color: var(--site-muted);
+}
+
+.presetButtons {
+  gap: 0.4rem;
+  margin-bottom: 1.3rem;
+}
+
+.presetButtons button {
+  font-size: 0.65rem;
+}
+
+.growingPair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 0.8rem;
+  padding: 0.7rem 1rem;
+  background: var(--ifm-background-color);
+  border-radius: 4px;
+  min-height: 132px;
+  align-items: start;
+}
+
+.stabilityValue {
+  text-align: right;
+  padding-top: 0.7rem;
+}
+
+.stabilityValue > span:first-child {
+  display: block;
+  color: var(--site-muted);
+  font-size: 0.62rem;
+}
+
+.stabilityValue strong {
+  font-family: var(--site-serif);
+  font-size: clamp(1.7rem, 5vw, 2.7rem);
+  color: var(--cf-rose);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.linePlot {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.6rem 0 0.9rem;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: var(--site-border);
+  stroke-width: 1;
+}
+
+.trace {
+  stroke: var(--cf-ink);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linejoin: round;
+}
+
+.area {
+  fill: var(--cf-ink);
+  opacity: 0.07;
+}
+
+.point {
+  fill: var(--cf-ink);
+  cursor: pointer;
+}
+
+.selectedPoint {
+  fill: var(--cf-rose);
+  stroke: var(--ifm-background-color);
+  stroke-width: 2;
+  cursor: pointer;
+}
+
+.guide {
+  stroke: var(--cf-rose);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  opacity: 0.6;
+}
+
+.growthControls {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.growthControls .button {
+  font-size: 0.65rem;
+}
+
+.exactValues {
+  font-size: 0.72rem;
+  margin-top: 1.3rem;
+}
+
+.exactValues summary {
+  cursor: pointer;
+  color: var(--cf-ink);
+}
+
+.pieceCatalogue {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1.2rem;
+  margin: 1.2rem 0;
+}
+
+.pieceCatalogue > div > span {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--site-muted);
+  margin-bottom: 0.6rem;
+}
+
+.tableScroll {
+  overflow-x: auto;
+  margin-top: 0.8rem;
+}
+
+.tableScroll table {
+  margin-bottom: 0;
+  font-size: 0.66rem;
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 0.5rem 0;
+  font-size: 0.8rem;
+}
+
+.download > span {
+  color: var(--site-muted);
+  font-size: 0.65rem;
+}
+
+@media (max-width: 600px) {
+  .puzzleBankGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .puzzleStrip {
+    grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1.1fr);
+  }
+
+  .puzzleDegreeArrow {
+    grid-column: 1 / -1;
+    justify-self: center;
+    transform: rotate(90deg);
+  }
+
+  .puzzleStep[data-puzzle-step='degree'] {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .puzzleStep[data-puzzle-step='degree'] h3 {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  .puzzleDegreeCheck + .puzzleDegreeCheck {
+    border-top: 0;
+    border-left: 1px solid var(--site-border);
+    margin-top: 0;
+    padding: 0 0 0 0.6rem;
+  }
+
+  .puzzleAssembly {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .baselineMatrix text {
+    font-size: 16px;
+  }
+
+  .pendingFigure {
+    min-height: 42rem;
+  }
+
+  .pendingFigure[data-composition-figure='atlas'] {
+    min-height: 48rem;
+  }
+
+  .figure button,
+  .figure select,
+  .download {
+    min-height: 44px;
+  }
+
+  .atlasLayout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  .inspector {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 1rem;
+    border-top: 1px solid var(--site-border);
+    padding-top: 1rem;
+    align-items: center;
+  }
+
+  .inspector > .eyebrow,
+  .inspector > .coefficient {
+    margin-bottom: 0;
+  }
+
+  .inspector > .coefficient {
+    text-align: right;
+  }
+
+  .atlasControls {
+    gap: 1rem;
+  }
+
+  .entryCount > span {
+    display: block;
+    max-width: 90px;
+  }
+
+  .pruningLayout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  .pairingGrid {
+    justify-self: center;
+  }
+
+  .pruningCount strong {
+    font-size: 2.7rem;
+  }
+
+  .growingPair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stabilityValue {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    padding-top: 0;
+  }
+
+  .growthControls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .growthControls .rangeLabel {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .linePlot text {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure button {
+    transition: none;
+  }
+}

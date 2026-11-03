@@ -74,7 +74,7 @@ const config = {
       announcementBar: isPreview
         ? {
             id: 'redesign-preview',
-            content: 'Design preview &middot; Some copy is unfinished. Sample articles are not published work.',
+            content: 'Design preview &middot; Some copy is unfinished. Drafts and sample articles are not published.',
             isCloseable: false,
           }
         : undefined,

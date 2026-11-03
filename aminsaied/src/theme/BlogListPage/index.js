@@ -34,7 +34,9 @@ export default function BlogListPage({metadata, items, ...props}) {
                   </time>
                   <div>
                     {post.frontMatter.preview && (
-                      <span className="preview-label">Sample article / design preview</span>
+                      <span className="preview-label">
+                        {post.frontMatter.editorial_draft ? 'Editorial draft' : 'Sample article / design preview'}
+                      </span>
                     )}
                     <h2><Link to={post.permalink}>{post.title}</Link></h2>
                     <p>{post.description}</p>
