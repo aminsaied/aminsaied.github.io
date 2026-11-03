@@ -58,6 +58,7 @@ also rejects broken internal links during the build.
 | Work highlights, most recent first | `aminsaied/src/data/work.js` |
 | Selected publications | `aminsaied/src/pages/publications.mdx` |
 | Blog posts | `aminsaied/blog/` |
+| Lean proof walkthrough and constraint diagram | `aminsaied/src/components/LeanArticle/` |
 | Local-only sample articles | `aminsaied/blog/preview/` |
 | Blog index layout | `aminsaied/src/theme/BlogListPage/index.js` |
 | Shared typography, colors, and article styles | `aminsaied/src/css/custom.css` |
@@ -87,6 +88,18 @@ The article at `/blog/lean-formal-proofs` retains its original December 2,
 takeaways: do not append the source's Roadmap or subsequent sections.
 Keep only public citations and reviewed diagrams, and do not restore private
 project or model identifiers when updating it.
+
+Keep the seven tactic examples visible in a two-column table, with a tactic
+label beside its explanation and code block. Rows stack on narrow screens;
+the content stays in the article's Markdown, inside `TacticRow` components.
+The proof walkthrough in `src/components/LeanArticle/` uses fixed
+example states, not a running Lean compiler. Its line buttons and Previous/Next
+controls follow all eight proof lines, including both cases, the smaller-divisor
+subproof, the recursive call, and the final "No goals" state. After the nested
+`simp_all` finishes, the display resumes the outer proof with `k` and `hk`.
+The panels stack on narrow screens. The constraint figure is an
+inline, theme-aware SVG with equal scales on both axes; the solid green square
+is the actual boundary, while the dashed diagonals are only guides.
 
 ## Staging and deployment
 
