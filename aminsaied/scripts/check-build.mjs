@@ -23,6 +23,7 @@ const home = readPage('/');
 const blog = readPage('/blog');
 const publications = readPage('/publications');
 const sampleRoute = '/blog/preview/verifiable-rewards';
+const leanRoute = '/blog/lean-formal-proofs';
 const legacyPosts = [
   '/blog/2020/12/18/intro-to-huggingface',
   '/blog/2021/01/15/gpt1-gpt2',
@@ -75,6 +76,31 @@ for (const route of legacyPosts) {
   }
 }
 
+const leanPost = readPage(leanRoute);
+assert.ok(blog.includes(`href="${leanRoute}"`), 'The Lean article is absent from the blog');
+assert.deepEqual(
+  [...leanPost.matchAll(/<h2\b[^>]*\bid="([^"]+)"/g)].map(([, id]) => id),
+  [
+    'what-is-lean',
+    'proofs-in-lean',
+    'whats-the-difference-between-formal-and-informal-reasoning-and-why-should-you-care',
+  ],
+  'The Lean article must contain only the three public sections, without a roadmap or later sections',
+);
+assert.equal((leanPost.match(/<details\b/g) ?? []).length, 3, 'Expandable proofs are missing');
+const tactics = leanPost.match(/<h3\b[^>]*\bid="tactics"[\s\S]*?(?=<h3\b)/)?.[0];
+assert.ok(tactics, 'The tactics section is missing');
+assert.doesNotMatch(tactics, /<\/?details\b/, 'Tactic examples must not be collapsible');
+assert.equal((tactics.match(/<pre\b/g) ?? []).length, 7, 'Tactic examples are missing');
+assert.ok((leanPost.match(/class="katex"/g) ?? []).length >= 20, 'Lean article math is missing');
+assert.ok(leanPost.includes('formally verifiable solutions provide a remedy.'));
+for (const name of ['lean-goal-state', 'amc12-constraint']) {
+  const image = leanPost.match(new RegExp(`src="(/assets/[^"]*${name}[^"]*\\.png)"`));
+  assert.ok(image, `Missing Lean article diagram: ${name}`);
+  const png = readFileSync(join(build, decodeURIComponent(image[1].slice(1))));
+  assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+}
+
 const fonts = readdirSync(join(build, 'assets/fonts'));
 assert.ok(fonts.some((font) => font.startsWith('KaTeX_') && font.endsWith('.woff2')));
 
@@ -105,5 +131,5 @@ if (mode === 'preview') {
 }
 
 console.log(
-  `Passed ${mode} checks: navigation, role order, 7 publications, 6 archived posts and PDFs, local math fonts, and sample isolation.`,
+  `Passed ${mode} checks: navigation, role order, 7 publications, 6 archived posts and PDFs, public Lean article and diagrams, local math fonts, and sample isolation.`,
 );

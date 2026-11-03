@@ -45,8 +45,9 @@ previous output. To build without the additional output checks, use `build`
 or `build:preview`.
 
 The checks cover the main routes, work ordering, publication math, the six
-existing blog URLs and their real PDF assets, locally bundled KaTeX fonts,
-and exclusion of preview articles from production pages and feeds. Docusaurus
+existing blog URLs and their real PDF assets, the public Lean article and its
+diagrams, locally bundled KaTeX fonts, and exclusion of preview articles from
+production pages and feeds. Docusaurus
 also rejects broken internal links during the build.
 
 ## Editing content
@@ -80,6 +81,12 @@ Inline math uses `$...$`; display math uses a `$$` block. `remark-math` and
 KaTeX CSS and fonts are bundled locally, without a CDN dependency. The
 preview article demonstrates inline equations, aligned equations, cases,
 syntax-highlighted code, and tables.
+
+The article at `/blog/lean-formal-proofs` retains its original December 2,
+2025 date. Its public scope ends with the formal-versus-informal reasoning
+takeaways: do not append the source's Roadmap or subsequent sections.
+Keep only public citations and reviewed diagrams, and do not restore private
+project or model identifiers when updating it.
 
 ## Staging and deployment
 

@@ -297,6 +297,16 @@ div[class*='announcementBar_'] {
   line-height: 1.7;
 }
 
+:root[data-theme='light'] .theme-code-block {
+  border: 1px solid #e1dccf;
+  border-radius: 7px;
+  box-shadow: none;
+}
+
+:root[data-theme='light'] .theme-code-block pre code {
+  padding: 1.1rem 1.2rem;
+}
+
 .markdown blockquote {
   color: var(--site-muted);
   border-left: 2px solid var(--ifm-color-primary);
