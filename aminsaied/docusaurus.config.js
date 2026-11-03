@@ -91,7 +91,14 @@ const config = {
         copyright: `&copy; ${new Date().getFullYear()} Amin Saied &middot; Built with care and Docusaurus.`,
       },
       prism: {
-        theme: prismThemes.github,
+        theme: {
+          ...prismThemes.github,
+          plain: {
+            ...prismThemes.github.plain,
+            color: '#2e322f',
+            backgroundColor: '#f3f0e8',
+          },
+        },
         darkTheme: prismThemes.dracula,
         additionalLanguages: ['bash', 'python'],
       },
