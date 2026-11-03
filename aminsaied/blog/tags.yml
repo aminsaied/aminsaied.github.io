@@ -10,3 +10,7 @@ reinforcement-learning:
   label: Reinforcement learning
 lean:
   label: Lean
+mathematics:
+  label: Mathematics
+algorithms:
+  label: Algorithms
