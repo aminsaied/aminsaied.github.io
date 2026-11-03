@@ -8,7 +8,7 @@
   },
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "SITE_PREVIEW=true docusaurus start --host 127.0.0.1 --no-open",
+    "start": "SITE_PREVIEW=true SIMULATE_PRODUCTION_VISIBILITY=true docusaurus start --host 127.0.0.1 --no-open",
     "build": "docusaurus build",
     "build:preview": "SITE_PREVIEW=true docusaurus build",
     "check:production": "yarn build && node scripts/check-build.mjs production",

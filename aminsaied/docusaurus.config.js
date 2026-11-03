@@ -7,6 +7,31 @@ import katex from 'rehype-katex';
 const isPreview = process.env.SITE_PREVIEW === 'true';
 const mathOptions = {strict: 'error'};
 
+/** @returns {import('@docusaurus/types').Plugin} */
+function recentBlogPosts() {
+  return {
+    name: 'recent-blog-posts',
+    allContentLoaded({allContent, actions}) {
+      const {blogPosts} = /** @type {import('@docusaurus/plugin-content-blog').BlogContent} */ (
+        allContent['docusaurus-plugin-content-blog'].default
+      );
+      const posts = blogPosts
+        .filter(({metadata}) =>
+          !metadata.unlisted && !metadata.frontMatter.unlisted && !metadata.frontMatter.draft,
+        )
+        .slice(0, 3)
+        .map(({metadata: {title, permalink, date, description, tags}}) => ({
+          title,
+          permalink,
+          date: date.toISOString(),
+          description,
+          tags: tags.map(({label, permalink: tagPermalink}) => ({label, permalink: tagPermalink})),
+        }));
+      actions.setGlobalData({posts});
+    },
+  };
+}
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Amin Saied',
@@ -28,6 +53,7 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+  plugins: [recentBlogPosts],
   presets: [
     [
       'classic',
@@ -71,18 +97,12 @@ const config = {
         defaultMode: 'light',
         respectPrefersColorScheme: true,
       },
-      announcementBar: isPreview
-        ? {
-            id: 'redesign-preview',
-            content: 'Design preview &middot; Some copy is unfinished. Drafts and sample articles are not published.',
-            isCloseable: false,
-          }
-        : undefined,
       navbar: {
         title: 'Amin Saied',
         items: [
           {to: '/', label: 'Home', position: 'right', activeBaseRegex: '^/$'},
           {to: '/blog', label: 'Blog', position: 'right'},
+          {to: '/experience', label: 'Experience', position: 'right'},
           {to: '/publications', label: 'Publications', position: 'right'},
         ],
       },

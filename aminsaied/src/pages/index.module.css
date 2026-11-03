@@ -68,103 +68,28 @@
   transform: rotate(-2deg);
 }
 
-.work {
-  border-top: 1px solid var(--site-border);
-  padding-top: 2.7rem;
-}
-
-.sectionHeading {
+.recentHeading {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 1rem;
-  margin-bottom: 2.3rem;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.sectionHeading h2 {
-  margin-bottom: 0;
+.recentHeading h2 {
   font-size: 2rem;
+  margin: 0;
 }
 
-.sectionHeading p {
-  color: var(--site-muted);
+.recentHeading a {
   font-size: 0.85rem;
-  margin: 0;
-}
-
-.timeline {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.role {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 2rem;
-  margin: 0;
-  padding: 0 0 2.7rem;
-}
-
-.role + .role {
-  padding-top: 2rem;
-  border-top: 1px solid var(--site-border);
-}
-
-.period {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 0.7rem;
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.75rem;
-  color: var(--site-muted);
-  padding-top: 0.35rem;
-}
-
-.current {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-family: var(--ifm-font-family-base);
-  font-size: 0.75rem;
-  color: var(--site-green);
-}
-
-.current::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.role h3 {
-  font-family: var(--ifm-font-family-base);
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-bottom: 0.2rem;
-}
-
-.team {
-  color: var(--ifm-color-primary);
-  font-size: 0.95rem;
-  margin-bottom: 0.85rem;
-}
-
-.description {
-  max-width: 40rem;
-  margin-bottom: 0;
-  color: var(--site-muted);
-}
-
-.earlier {
-  margin: 0 0 2.8rem;
+  white-space: nowrap;
 }
 
 .explore {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 3rem;
   padding: 2.5rem 0 4.5rem;
   border-top: 1px solid var(--site-border);
@@ -195,6 +120,13 @@
   color: var(--ifm-heading-color);
 }
 
+@media (max-width: 900px) {
+  .explore {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
 @media (max-width: 700px) {
   .intro {
     grid-template-columns: 1fr;
@@ -212,28 +144,7 @@
     display: none;
   }
 
-  .sectionHeading {
-    display: block;
-  }
-
-  .sectionHeading p {
-    margin-top: 0.6rem;
-  }
-
-  .role {
-    grid-template-columns: 1fr;
-    gap: 0.8rem;
-  }
-
-  .period {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
   .explore {
-    grid-template-columns: 1fr;
-    gap: 2rem;
     padding-bottom: 3rem;
   }
 }

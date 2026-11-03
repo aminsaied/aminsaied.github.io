@@ -1,14 +1,8 @@
 import React from 'react';
-import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import BlogListPaginator from '@theme/BlogListPaginator';
 import BlogListPageStructuredData from '@theme/BlogListPage/StructuredData';
-
-const dateFormat = new Intl.DateTimeFormat('en', {
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
+import PostSummary from '@site/src/components/PostSummary';
 
 export default function BlogListPage({metadata, items, ...props}) {
   return (
@@ -20,36 +14,15 @@ export default function BlogListPage({metadata, items, ...props}) {
           <h1>Blog</h1>
           <p>
             Writing about machine learning, verifiable rewards, and mathematics.
-            A place for technical notes, worked examples, and the occasional talk.
+            A place for technical notes and worked examples.
           </p>
         </header>
         <ul className="post-list">
-          {items.map(({content: Post}) => {
-            const post = Post.metadata;
-            return (
-              <li key={post.permalink}>
-                <article className="post-summary">
-                  <time dateTime={post.date}>
-                    {dateFormat.format(new Date(post.date))}
-                  </time>
-                  <div>
-                    {post.frontMatter.preview && (
-                      <span className="preview-label">
-                        {post.frontMatter.editorial_draft ? 'Editorial draft' : 'Sample article / design preview'}
-                      </span>
-                    )}
-                    <h2><Link to={post.permalink}>{post.title}</Link></h2>
-                    <p>{post.description}</p>
-                    <div className="post-topics">
-                      {post.tags.map((tag) => (
-                        <Link key={tag.permalink} to={tag.permalink}>{tag.label}</Link>
-                      ))}
-                    </div>
-                  </div>
-                </article>
-              </li>
-            );
-          })}
+          {items.map(({content: Post}) => (
+            <li key={Post.metadata.permalink}>
+              <PostSummary post={Post.metadata} />
+            </li>
+          ))}
         </ul>
         <BlogListPaginator metadata={metadata} />
       </main>

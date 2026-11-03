@@ -1,8 +1,10 @@
 # Amin Saied's website
 
 A personal website built with Docusaurus 3, React, and Markdown/MDX. The site
-has three sections: Home, Blog, and Publications. The website project is in
-`aminsaied/`.
+has four sections: Home, Blog, Experience, and Publications. The homepage has
+an introduction, the three most recent blog posts, and pointers to the other
+sections; the full career timeline is at `/experience`. The website project
+is in `aminsaied/`.
 
 ## Local setup
 
@@ -20,11 +22,13 @@ yarn --cwd aminsaied start
 Open `http://127.0.0.1:3000`. Changes to content and styles reload automatically.
 The development server binds only to the loopback interface.
 
-`yarn start` enables **design preview mode**, including a visible preview
-banner, the sample math article at `/blog/preview/verifiable-rewards`, and the
-editorial draft at `/blog/preview/composition-factors`. Drafts and samples are
-labeled separately from published work. Neither preview article appears in
-production pages or feeds. Preview builds have `noindex` metadata.
+`yarn start` enables **preview mode**, without a visible banner. The blog lists
+the public Lean and composition-factors articles. The unlisted layout sample
+at `/blog/preview/verifiable-rewards` is available by direct URL in preview
+mode, but never appears in production pages or feeds.
+Preview builds have `noindex` metadata. The start command uses Docusaurus's
+`SIMULATE_PRODUCTION_VISIBILITY=true` setting so unlisted posts also stay out
+of the development server's listings.
 
 ## Build and check
 
@@ -34,7 +38,7 @@ Run these commands from the repository root:
 # Production build and output checks (excludes preview articles).
 yarn --cwd aminsaied check:production
 
-# Preview build and output checks (includes drafts and sample articles).
+# Preview build and output checks (also builds the unlisted layout sample).
 yarn --cwd aminsaied check:preview
 
 # Serve the most recently built output.
@@ -45,11 +49,11 @@ Both build modes write to `aminsaied/build/`; the last build replaces the
 previous output. To build without the additional output checks, use `build`
 or `build:preview`.
 
-The checks cover the main routes, work ordering, publication math, the six
-existing blog URLs and their real PDF assets, the public Lean article and its
-diagrams, the composition-factors draft and its exact data, locally bundled
-KaTeX fonts, and exclusion of preview articles from production pages and feeds.
-Docusaurus also rejects broken internal links during the build.
+The checks cover the main routes, work ordering, publication math, the current
+blog selection, the six unlisted talk URLs and their real PDF assets, the public
+Lean article and its diagrams, the composition-factors article and its exact data,
+locally bundled KaTeX fonts, and exclusion of preview articles from production
+pages and feeds. Docusaurus also rejects broken internal links during the build.
 
 ## Editing content
 
@@ -57,18 +61,18 @@ Docusaurus also rejects broken internal links during the build.
 | --- | --- |
 | Introduction and homepage layout | `aminsaied/src/pages/index.js` |
 | Work highlights, most recent first | `aminsaied/src/data/work.js` |
+| Experience page and timeline styles | `aminsaied/src/pages/experience.js`, `aminsaied/src/pages/experience.module.css` |
 | Selected publications | `aminsaied/src/pages/publications.mdx` |
 | Blog posts | `aminsaied/blog/` |
 | Lean proof walkthrough and constraint diagram | `aminsaied/src/components/LeanArticle/` |
 | Preview-only drafts and sample articles | `aminsaied/blog/preview/` |
 | Composition-factor figures and generated data | `aminsaied/src/components/CompositionFactors/` |
 | Blog index layout | `aminsaied/src/theme/BlogListPage/index.js` |
+| Shared blog and recent-post summaries | `aminsaied/src/components/PostSummary/index.js` |
 | Shared typography, colors, and article styles | `aminsaied/src/css/custom.css` |
 | Homepage styles | `aminsaied/src/pages/index.module.css` |
 | Navigation and plugins | `aminsaied/docusaurus.config.js` |
 
-Career descriptions marked as unfinished are intentional placeholders.
-Earlier roles and the final publication selection still need editorial review.
 The current portrait is reused from `static/img/logo.svg`.
 
 ### Technical writing
@@ -78,6 +82,16 @@ author, and tags in YAML front matter. Define new tags in `blog/tags.yml`.
 Use an explicit `slug` when you want a stable URL independent of the filename.
 Use `<!-- truncate -->` in Markdown or `{/* truncate */}` in MDX to end the
 excerpt.
+
+The homepage's Recent section automatically shows up to three posts, newest
+first, using the blog metadata provided by Docusaurus. The `recent-blog-posts`
+plugin in `docusaurus.config.js` sends only summary metadata to the homepage,
+not article bodies or interactive figures. Unlisted posts and drafts are
+excluded. Content under `blog/preview/` is excluded from production.
+
+Set `unlisted: true` in front matter to retain an article's direct URL without
+including it in public listings, feeds, or the sitemap. The six old talks and
+the layout sample use this setting; their source files and assets are retained.
 
 Inline math uses `$...$`; display math uses a `$$` block. `remark-math` and
 `rehype-katex` are enabled for both blog posts and standalone MDX pages.
@@ -103,10 +117,10 @@ The panels stack on narrow screens. The constraint figure is an
 inline, theme-aware SVG with equal scales on both axes; the solid green square
 is the actual boundary, while the dashed diagonals are only guides.
 
-### Composition-factors editorial draft
+### Composition-factors article
 
 Edit the narrative in
-`aminsaied/blog/preview/2026-11-02-composition-factors.mdx`. The figures in
+`aminsaied/blog/2018-09-01-composition-factors.mdx`. The figures in
 `src/components/CompositionFactors/` use a degree-14 table: rows index
 target partitions (lambda), columns source partitions (mu), with increasing
 degree followed by reverse lexicographic order. A static degree-5 matrix
@@ -159,13 +173,13 @@ pinned original source, including its entire degree-4 matrix. The generated
 JSON includes a matrix checksum and is downloadable from the article. Historical
 timings in the text are attributed to the paper, not to this exporter.
 
-The draft is deliberately excluded from production by its `blog/preview/`
-location. Publishing requires an editorial decision, moving it out of that
-directory, choosing its public slug, and updating the isolation checks.
+The article is published at `/blog/composition-factors`, retaining its
+September 1, 2018 date. Its figures and data are checked in both production
+and preview builds.
 
 ## Staging and deployment
 
-The redesign is developed on `staging/redesign`. Its CI workflow builds and
+Changes can be developed on `staging/redesign`. Its CI workflow builds and
 checks both modes but **does not deploy**. Local branch creation does not
 publish it to GitHub.
 
@@ -176,5 +190,6 @@ that branch at `https://aminsaied.github.io/`.
 
 The old DS Ref source files remain in `aminsaied/docs/` for reference, but
 the docs plugin is disabled: those pages are not built or linked. Their old
-URLs return the site's not-found page. Existing blog URLs and slides remain
-available.
+URLs return the site's not-found page. Old talk URLs and slides remain
+available by direct link, but the talks are no longer included in public blog
+listings or feeds.

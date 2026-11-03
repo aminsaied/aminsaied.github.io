@@ -21,10 +21,12 @@ function filesIn(directory) {
 }
 
 const home = readPage('/');
+const experience = readPage('/experience');
 const blog = readPage('/blog');
 const publications = readPage('/publications');
 const sampleRoute = '/blog/preview/verifiable-rewards';
-const compositionRoute = '/blog/preview/composition-factors';
+const compositionRoute = '/blog/composition-factors';
+const retiredCompositionRoute = '/blog/preview/composition-factors';
 const leanRoute = '/blog/lean-formal-proofs';
 const legacyPosts = [
   '/blog/2020/12/18/intro-to-huggingface',
@@ -34,17 +36,79 @@ const legacyPosts = [
   '/blog/2021/08/19/gnns',
   '/blog/2021/09/24/roberta-electra',
 ];
-assert.ok(home.includes('Member of Technical Staff'), 'The current role is missing');
-assert.ok(home.includes('Science Lead'), 'The previous role is missing');
-assert.ok(
-  home.indexOf('MAI Post-training') < home.indexOf('Science Lead'),
-  'Work highlights must be reverse chronological',
-);
+const unlistedPosts = [...legacyPosts, sampleRoute];
+const noIndex = /<meta\b(?=[^>]*name="robots")(?=[^>]*content="[^"]*noindex)[^>]*>/;
 
-for (const html of [home, blog, publications]) {
+assert.equal(
+  (blog.match(/class="post-summary"/g) ?? []).length,
+  2,
+  'The blog must list only the current articles',
+);
+for (const route of unlistedPosts) {
+  assert.ok(!blog.includes(route), `An unlisted post appeared in the blog: ${route}`);
+  assert.ok(!home.includes(route), `An unlisted post appeared on the homepage: ${route}`);
+}
+
+const recent = home.match(/<section\b[^>]*aria-labelledby="recent-heading"[\s\S]*?<\/section>/)?.[0];
+assert.ok(recent, 'The recent posts section is missing');
+assert.match(recent, /href="\/blog"/, 'The all-posts link is missing');
+const recentRoutes = [...recent.matchAll(/<h3\b[^>]*><a\b[^>]*href="([^"]+)"/g)]
+  .map(([, route]) => route);
+const blogRoutes = [...blog.matchAll(/<h2\b[^>]*><a\b[^>]*href="([^"]+)"/g)]
+  .map(([, route]) => route);
+assert.deepEqual(
+  recentRoutes,
+  blogRoutes.slice(0, 3),
+  'Recent posts must match the three newest visible blog posts in order',
+);
+assert.ok(recentRoutes.length > 0 && recentRoutes.length <= 3);
+assert.doesNotMatch(recent, /Editorial draft/);
+
+const homePointers = home.match(/<nav\b[^>]*aria-label="Explore the site"[\s\S]*?<\/nav>/)?.[0];
+assert.ok(homePointers, 'The homepage pointers are missing');
+assert.equal((homePointers.match(/<a\b/g) ?? []).length, 3);
+for (const route of ['/experience', '/blog', '/publications']) {
+  assert.ok(homePointers.includes(`href="${route}"`), `The homepage pointer to ${route} is missing`);
+}
+assert.doesNotMatch(home, /id="work-heading"/, 'The timeline must not remain on the homepage');
+
+const timeline = experience.match(/<ol\b[^>]*aria-labelledby="work-heading"[\s\S]*?<\/ol>/)?.[0];
+assert.ok(timeline, 'The experience timeline is missing');
+assert.deepEqual(
+  [...timeline.matchAll(/<h2\b[^>]*>([^<]+)<\/h2>/g)].map(([, role]) => role),
+  [
+    'Member of Technical Staff',
+    'Science Lead',
+    'Research Scientist',
+    'Applied Scientist',
+    'Mathematics PhD',
+  ],
+  'All five work highlights must be present in reverse chronological order',
+);
+assert.ok(experience.includes('Microsoft AI, Post-training'), 'The current team is missing');
+assert.ok(experience.includes('Microsoft, ExP'), 'The ExP team is missing');
+assert.ok(experience.includes('2018 - 2021'), 'The ExP dates are missing');
+assert.ok(experience.includes('Cornell University'), 'The PhD institution is missing');
+assert.ok(experience.includes('2013 - 2018'), 'The PhD dates are missing');
+assert.ok(experience.includes('MAI-Code'), 'The MAI-Code work is missing');
+assert.ok(experience.includes('Led the science pillar within Azure'), 'The safety leadership scope is missing');
+
+for (const html of [home, experience, blog, publications]) {
+  const navbar = html.match(/<nav\b[^>]*class="[^"]*\bnavbar\b[^"]*"[\s\S]*?<\/nav>/)?.[0];
+  assert.ok(navbar, 'The main navbar is missing');
+  assert.match(navbar, /href="\/blog"[\s\S]*href="\/experience"/, 'Blog must precede Experience in the navbar');
+  assert.match(html, /href="\/experience"/, 'Experience navigation is missing');
   assert.match(html, /href="\/blog"/, 'Blog navigation is missing');
   assert.match(html, /href="\/publications"/, 'Publications navigation is missing');
   assert.doesNotMatch(html, /href="\/docs\//, 'Retired documentation is still linked');
+  assert.doesNotMatch(
+    html,
+    /announcementBar_|preview-label|Editorial draft/,
+    'Release pages must not show design-preview banners or draft labels',
+  );
+  if (mode === 'production') {
+    assert.doesNotMatch(html, noIndex, 'Public pages must be indexable');
+  }
 }
 
 for (const html of [home, publications]) {
@@ -67,7 +131,7 @@ assert.ok(!existsSync(join(build, 'markdown-page.html')), 'The starter page was 
 
 for (const route of legacyPosts) {
   const html = readPage(route);
-  assert.ok(blog.includes(`href="${route}"`), `The blog index lost ${route}`);
+  assert.match(html, noIndex, `An archived talk is indexable: ${route}`);
   const pdfLinks = [...html.matchAll(/href="(\/[^"]+\.pdf)"/g)];
   assert.ok(pdfLinks.length > 0, `The slides link is missing on ${route}`);
   for (const [, href] of pdfLinks) {
@@ -154,11 +218,8 @@ assert.ok(fonts.some((font) => font.startsWith('KaTeX_') && font.endsWith('.woff
 
 const sampleExists = existsSync(join(build, `${sampleRoute.slice(1)}.html`));
 assert.equal(sampleExists, mode === 'preview', 'Sample article isolation failed');
-assert.equal(
-  existsSync(join(build, `${compositionRoute.slice(1)}.html`)),
-  mode === 'preview',
-  'Composition-factors editorial draft isolation failed',
-);
+assert.ok(existsSync(join(build, `${compositionRoute.slice(1)}.html`)), 'The public composition article is missing');
+assert.ok(!existsSync(join(build, `${retiredCompositionRoute.slice(1)}.html`)), 'The retired preview route was built');
 
 const coefficients = JSON.parse(readFileSync(
   new URL('../src/components/CompositionFactors/coefficients.json', import.meta.url),
@@ -196,19 +257,25 @@ const coefficientBundles = filesIn(join(build, 'assets/js')).filter((file) =>
 );
 assert.equal(
   coefficientBundles.length,
-  mode === 'preview' ? 1 : 0,
-  'The coefficient data must occur once in preview assets and never in production assets',
+  1,
+  'The coefficient data must occur exactly once in the built assets',
 );
-if (mode === 'preview') {
-  assert.match(
-    basename(coefficientBundles[0]),
-    /^composition-figures\.[^.]+\.js$/,
-    'The dataset must live in the on-demand figure bundle, not an article or excerpt bundle',
-  );
-}
+assert.match(
+  basename(coefficientBundles[0]),
+  /^composition-figures\.[^.]+\.js$/,
+  'The dataset must live in the on-demand figure bundle, not an article or excerpt bundle',
+);
 
-for (const file of filesIn(build).filter((file) => /\.(html|xml)$/.test(file))) {
+for (const file of filesIn(build).filter((file) => /\.(html|xml|json)$/.test(file))) {
   const content = readFileSync(file, 'utf8');
+  if (/(?:\/(?:atom|rss|sitemap)\.xml|\/feed\.json)$/.test(file)) {
+    for (const route of unlistedPosts) {
+      assert.ok(!content.includes(route), `An unlisted post appeared in ${file}: ${route}`);
+    }
+    if (mode === 'production') {
+      assert.ok(content.includes(compositionRoute), `The public composition article is missing from ${file}`);
+    }
+  }
   assert.doesNotMatch(content, /class="katex-error"/, `Math rendering failed: ${file}`);
   assert.doesNotMatch(
     content,
@@ -217,10 +284,9 @@ for (const file of filesIn(build).filter((file) => /\.(html|xml)$/.test(file))) 
   );
   if (mode === 'production') {
     assert.ok(!content.includes(sampleRoute), `Preview content leaked into ${file}`);
-    assert.ok(!content.includes(compositionRoute), `Editorial draft leaked into ${file}`);
   }
+  assert.ok(!content.includes(retiredCompositionRoute), `The retired composition preview route remains in ${file}`);
   if (file.endsWith('.html')) {
-    const noIndex = /<meta\b(?=[^>]*name="robots")(?=[^>]*content="[^"]*noindex)[^>]*>/;
     if (mode === 'preview') {
       assert.match(content, noIndex, `Preview is indexable: ${file}`);
     }
@@ -229,15 +295,19 @@ for (const file of filesIn(build).filter((file) => /\.(html|xml)$/.test(file))) 
 
 if (mode === 'preview') {
   const sample = readPage(sampleRoute);
-  assert.ok(blog.includes(`href="${sampleRoute}"`), 'The sample is absent from the blog');
+  assert.match(sample, noIndex, 'The unlisted layout sample is indexable');
   assert.match(sample, /Design preview, not a published article/);
   assert.ok((sample.match(/class="katex"/g) ?? []).length >= 10);
   assert.ok((sample.match(/class="katex-display"/g) ?? []).length >= 3);
   assert.match(sample, /application\/x-tex/, 'Accessible math output is missing');
+}
 
+function checkCompositionArticle() {
   const composition = readPage(compositionRoute);
-  assert.ok(blog.includes(`href="${compositionRoute}"`), 'The editorial draft is absent from the preview blog');
-  assert.match(blog, /Editorial draft/);
+  assert.ok(blog.includes(`href="${compositionRoute}"`), 'The public composition article is absent from the blog');
+  assert.ok(recent.includes(`href="${compositionRoute}"`), 'The public composition article is absent from Recent');
+  assert.equal(noIndex.test(composition), mode === 'preview', 'The public composition article must be indexable');
+  assert.doesNotMatch(composition, /announcementBar_|preview-label|Editorial draft/);
   assert.match(composition, /Member of Technical Staff, Microsoft AI/);
   assert.doesNotMatch(composition, /ML Engineer, Microsoft|Editorial draft for review/);
   assert.equal(
@@ -406,6 +476,8 @@ if (mode === 'preview') {
   assert.ok((composition.match(/class="katex"/g) ?? []).length >= 25);
 }
 
+checkCompositionArticle();
+
 console.log(
-  `Passed ${mode} checks: navigation, role order, 7 publications, 6 archived posts and PDFs, public Lean article and diagrams, local math fonts, exact coefficient data, and preview isolation.`,
+  `Passed ${mode} checks: navigation, role order, 7 publications, 2 public blog posts, 6 unlisted talks and PDFs, Lean diagrams, local math fonts, composition figures and exact data, and sample isolation.`,
 );

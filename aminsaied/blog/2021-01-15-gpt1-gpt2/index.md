@@ -1,6 +1,7 @@
 ---
 title: '✨Talk: GPT-1 and GPT-2 Review'
 description: 'A review of GPT-1 and the Transformer architecture, with GPT-2 material in the accompanying slides.'
+unlisted: true
 authors:
   - aminsaied
 tags:
