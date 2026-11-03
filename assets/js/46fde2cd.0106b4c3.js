@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkaminsaied=self.webpackChunkaminsaied||[]).push([[7180],{4528:e=>{e.exports=JSON.parse('{"permalink":"/blog/tags/gnn","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

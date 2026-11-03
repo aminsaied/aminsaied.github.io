@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkaminsaied||=[]).push([[947],{6600(a){a.exports=JSON.parse('{"authors":[{"name":"Amin Saied","title":"Member of Technical Staff, Microsoft AI","url":"https://github.com/aminsaied","imageURL":"https://github.com/aminsaied.png","key":"aminsaied","page":null,"count":2}]}')}}]);
