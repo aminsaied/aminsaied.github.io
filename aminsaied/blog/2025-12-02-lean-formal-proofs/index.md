@@ -9,6 +9,8 @@ tags:
   - reinforcement-learning
 ---
 
+import {ConstraintFigure, ProofWalkthrough, TacticRow, TacticTable} from '@site/src/components/LeanArticle';
+
 Lean is a programming language in which mathematical proofs can be checked by a computer. This post gives an introduction to Lean, from its origins and recent history to its applications to model reasoning and verifiable reinforcement learning.
 
 <!-- truncate -->
@@ -55,12 +57,12 @@ theorem exists_prime_factor :
     ∀ n, 1 < n → ∃ k, IsPrime k ∧ k ∣ n := by
   intro n h1
   -- Either `n` is prime...
-  by_cases hprime : IsPrime n
+  by_cases h_prime : IsPrime n
   · grind [Nat.dvd_refl]
   -- ... or it has a non-trivial divisor with a prime factor
-  · obtain ⟨k, _⟩ : ∃ k, 1 < k ∧ k < n ∧ k ∣ n := by
+  · obtain ⟨k, hk⟩ : ∃ k, 1 < k ∧ k < n ∧ k ∣ n := by
       simp_all [IsPrime]
-    obtain ⟨p, _, _⟩ := exists_prime_factor k (by grind)
+    obtain ⟨p, hp, hpk⟩ := exists_prime_factor k (by grind)
     grind [Nat.dvd_trans]
 
 /-- The factorial, defined recursively, with custom notation -/
@@ -284,59 +286,101 @@ There are multiple ways to do this in Lean, but the way that most closely resemb
 
 Here are some basic examples to give the idea.
 
-- `rfl`: Closes a goal when the two sides of an equality are definitionally equal.
+<TacticTable>
 
-  ```lean
-  example : 1 = 1 := by
-    rfl
-  ```
+<TacticRow name="rfl">
 
-- `rw [e]`: Applies identity `e` as a rewrite rule to the target of the main goal.
+Closes a goal when the two sides of an equality are definitionally equal.
 
-  ```lean
-  example (a b : ℕ) (h : a = b) : a + 1 = b + 1 := by
-    rw [h]
-  ```
+```lean
+example : 1 = 1 := by
+  rfl
+```
 
-- `exact e`: Closes the main goal if its target type matches that of `e`.
+</TacticRow>
 
-  ```lean
-  example (a : ℕ) : a + 0 = a := by
-    exact Nat.add_zero a
-  ```
+<TacticRow name="rw">
 
-- `apply e`: Tries to match the current goal against the conclusion of `e`'s type.
+`rw [e]` applies identity `e` as a rewrite rule to the target of the main goal.
 
-  ```lean
-  example (p q : Prop) (h_p : p) (h_pq : p → q) : q := by
-    -- we need to show q
-    apply h_pq    -- apply the hypothesis h_pq, so now we need to show p
-    exact h_p     -- but we have p, it's exactly the hypothesis h_p!
-  ```
+```lean
+example (a b : ℕ) (h : a = b) :
+    a + 1 = b + 1 := by
+  rw [h]
+```
 
-- `linarith`: A powerful tactic that solves linear inequalities of various kinds.
+</TacticRow>
 
-  ```lean
-  example : (0 : ℝ) ≤ 73 := by
-    linarith
-  ```
+<TacticRow name="exact">
 
-- `induction' n with d hd`: This is how you start a proof by induction. Here `hd` becomes the induction hypothesis - i.e., we assume the statement holds for `n = d` and need to prove it holds for `n = d + 1`.
+`exact e` closes the main goal if its target type matches that of `e`.
 
-  ```lean
-  example (a : ℕ) : a + 1 = 1 + a := by
-    induction' a with d hd    -- begin a proof by induction
-    · rfl                     -- case a = 0 amounts to proving 1 = 1
-    · linarith                -- case a = d, the inductive step
-  ```
+```lean
+example (a : ℕ) : a + 0 = a := by
+  exact Nat.add_zero a
+```
 
-- `simp`: Uses lemmas and hypotheses to simplify the main goal target or non-dependent hypotheses.
+</TacticRow>
 
-  ```lean
-  example (a b c d : ℕ) :
-    (a + 0) * 1 + (b * 0 + c) + (d + 0) * 1 = a + c + d := by
-    simp
-  ```
+<TacticRow name="apply">
+
+`apply e` tries to match the current goal against the conclusion of `e`'s type.
+
+```lean
+example (p q : Prop) (h_p : p)
+    (h_pq : p → q) : q := by
+  -- we need to show q
+  -- apply the hypothesis h_pq,
+  -- so now we need to show p
+  apply h_pq
+  -- but we have p, it's exactly
+  -- the hypothesis h_p!
+  exact h_p
+```
+
+</TacticRow>
+
+<TacticRow name="linarith">
+
+A powerful tactic that solves linear inequalities of various kinds.
+
+```lean
+example : (0 : ℝ) ≤ 73 := by
+  linarith
+```
+
+</TacticRow>
+
+<TacticRow name="induction'">
+
+`induction' n with d hd` starts a proof by induction. Here `hd` becomes the induction hypothesis - i.e., we assume the statement holds for `n = d` and need to prove it holds for `n = d + 1`.
+
+```lean
+example (a : ℕ) : a + 1 = 1 + a := by
+  -- begin a proof by induction
+  induction' a with d hd
+  -- case a = 0 amounts to proving 1 = 1
+  · rfl
+  -- case a = d, the inductive step
+  · linarith
+```
+
+</TacticRow>
+
+<TacticRow name="simp">
+
+Uses lemmas and hypotheses to simplify the main goal target or non-dependent hypotheses.
+
+```lean
+example (a b c d : ℕ) :
+    (a + 0) * 1 + (b * 0 + c) +
+      (d + 0) * 1 = a + c + d := by
+  simp
+```
+
+</TacticRow>
+
+</TacticTable>
 
 Tactics allow us to approach proving statements in Lean in a similar way to proving statements in mathematics. In either setting, one structures their argument as a series of steps until the final goal has been obtained. Tactics are a powerful concept as they let you construct programs to write proofs interactively, procedurally and even automatically, as we will see.
 
@@ -389,23 +433,9 @@ theorem exists_prime_factor :
     ∀ n, 1 < n → ∃ k, IsPrime k ∧ k ∣ n
 ```
 
-When we use Lean we want to _see_ the goal we are trying to prove. Lean provides this information to the user.
+When we use Lean we want to _see_ the goal we are trying to prove. Lean provides this information, and we can watch it evolve as we make steps in the proof. The walkthrough below follows the complete proof, from the initial goal to both cases being closed.
 
-```text
-⊢ ∀ (n : ℕ), 1 < n → ∃ k, IsPrime k ∧ k ∣ n
-```
-
-Moreover, we can see this state evolve dynamically as we make steps in the proof. For example, the first step of our proof could be:
-
-```lean
-by
-  intro n h1
-  by_cases h_prime : IsPrime n
-```
-
-After each line of the proof we can see the goal state evolve.
-
-![Three stages of a Lean proof, showing how introducing hypotheses and splitting cases changes the goal state.](./lean-goal-state.png)
+<ProofWalkthrough />
 
 ### Mathlib, and the growing repository of results
 
@@ -489,7 +519,7 @@ Notice:
 
 Here's a picture of the region enclosed by the constraint in the problem (shaded in green). The constraint itself is the boundary of that region. Looking at this, it's possible to guess at the reason the model mentioned diamonds rotated by 45 degrees.
 
-![The square with vertices at plus or minus one in each coordinate, with the point (3, 0) marked to its right.](./amc12-constraint.png)
+<ConstraintFigure />
 
 Question: how much credit should be assigned to this answer? It has the right _flavor_, and indeed makes many of the correct steps. But it leaves a gap between a plausible explanation and a justified argument. Worse, that gap is **not obvious at a glance**! This makes an LLM-as-a-judge-based reward hard to trust.
 

@@ -1,0 +1,361 @@
+.tacticTableFrame {
+  container-type: inline-size;
+  margin: 1.5rem 0 2rem;
+  border: 1px solid var(--site-border);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.tacticTable {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tacticTable tr:nth-child(n) {
+  background: transparent;
+  border: 0;
+}
+
+.tacticTable th,
+.tacticTable td {
+  padding: 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--site-border);
+  vertical-align: top;
+  text-align: left;
+}
+
+.tacticTable th {
+  background: var(--site-surface);
+}
+
+.tacticTable th:first-child {
+  width: 7.5rem;
+  border-right: 1px solid var(--site-border);
+}
+
+.tacticTable thead th {
+  color: var(--site-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tacticTable tbody th {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+.tacticTable th code {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.tacticTable td > p {
+  margin-bottom: 0.85rem;
+}
+
+.tacticTable td > :last-child {
+  margin-bottom: 0;
+}
+
+.tacticTable tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+@container (max-width: 500px) {
+  .tacticTable,
+  .tacticTable tbody,
+  .tacticTable tr,
+  .tacticTable th,
+  .tacticTable td {
+    display: block;
+    width: auto;
+  }
+
+  .tacticTable thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .tacticTable th:first-child {
+    width: auto;
+    border-right: 0;
+  }
+
+  .tacticTable tbody th {
+    padding: 0.65rem 1rem;
+    border-bottom: 0;
+  }
+}
+
+.walkthrough,
+.constraintFigure {
+  container-type: inline-size;
+  margin: 1.75rem 0 2.25rem;
+}
+
+.proofGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  background: var(--proof-background);
+  color: var(--proof-color);
+  border: 1px solid #e1dccf;
+  border-radius: 7px;
+}
+
+:global([data-theme='dark']) .proofGrid {
+  border-color: var(--site-border);
+}
+
+.proofPane,
+.goalPane {
+  min-width: 0;
+  padding: 1rem 0.9rem;
+}
+
+.goalPane {
+  border-left: 1px solid var(--site-border);
+}
+
+.paneTitle {
+  color: var(--site-muted);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.85rem;
+}
+
+.proofLine {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.55rem 0.4rem;
+  border: 0;
+  border-left: 2px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  text-align: left;
+  cursor: pointer;
+}
+
+.proofLine:hover,
+.proofLine[aria-pressed='true'] {
+  background: var(--docusaurus-highlighted-code-line-bg);
+}
+
+.proofLine[aria-pressed='true'] {
+  border-left-color: var(--ifm-color-primary);
+}
+
+.lineNumber {
+  flex: 0 0 0.8rem;
+  color: var(--site-muted);
+  font-size: 0.68rem;
+  user-select: none;
+}
+
+.walkthrough code {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.goalStates {
+  min-height: 18rem;
+}
+
+.goalCount {
+  margin: 0 0 0.7rem;
+  color: var(--site-muted);
+  font-size: 0.75rem;
+}
+
+.proofComplete {
+  margin: 0 0 0.5rem;
+  color: var(--site-green);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.walkthrough .goal {
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  border-radius: 0;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.goal + .goal {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--site-border);
+}
+
+.stepControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  font-size: 0.75rem;
+  color: var(--site-muted);
+}
+
+.stepControls button {
+  min-height: 44px;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--site-border);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  font: inherit;
+  cursor: pointer;
+}
+
+.stepControls button:hover:not(:disabled) {
+  background: var(--site-surface);
+  border-color: var(--ifm-color-primary);
+}
+
+.stepControls button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.stepExplanation {
+  margin: 0.85rem 0 0.5rem;
+  font-size: 0.85rem;
+}
+
+.caption {
+  color: var(--site-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.constraintFigure {
+  --guide-ochre: #997344;
+  padding: 0.9rem;
+  border: 1px solid var(--site-border);
+  border-radius: 7px;
+}
+
+:global([data-theme='dark']) .constraintFigure {
+  --guide-ochre: #c7ae80;
+}
+
+.constraintSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.guide {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-dasharray: 6 6;
+  opacity: 0.65;
+}
+
+.risingGuide {
+  stroke: var(--ifm-color-primary);
+}
+
+.fallingGuide {
+  stroke: var(--guide-ochre);
+}
+
+.axis {
+  fill: none;
+  stroke: var(--site-muted);
+  stroke-width: 1.5;
+}
+
+.constraintBoundary {
+  fill: var(--site-green);
+  fill-opacity: 0.1;
+  stroke: var(--site-green);
+  stroke-width: 3;
+}
+
+.constraintSvg text {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 19px;
+  paint-order: stroke;
+  stroke: var(--ifm-background-color);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+
+.axisLabels text {
+  fill: var(--site-muted);
+  font-family: var(--site-serif);
+  font-size: 24px;
+  font-style: italic;
+}
+
+.vertex {
+  fill: var(--site-green);
+}
+
+.referencePoint {
+  fill: var(--ifm-color-primary);
+}
+
+.constraintFigure .caption {
+  margin-top: 0.6rem;
+  text-align: center;
+}
+
+@container (max-width: 540px) {
+  .proofGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goalPane {
+    border-left: 0;
+    border-top: 1px solid var(--site-border);
+  }
+}
+
+@container (max-width: 420px) {
+  .constraintSvg text {
+    font-size: 26px;
+  }
+}
+
+@container (max-width: 330px) {
+  .constraintSvg text {
+    font-size: 32px;
+  }
+}

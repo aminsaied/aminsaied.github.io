@@ -91,15 +91,62 @@ assert.equal((leanPost.match(/<details\b/g) ?? []).length, 3, 'Expandable proofs
 const tactics = leanPost.match(/<h3\b[^>]*\bid="tactics"[\s\S]*?(?=<h3\b)/)?.[0];
 assert.ok(tactics, 'The tactics section is missing');
 assert.doesNotMatch(tactics, /<\/?details\b/, 'Tactic examples must not be collapsible');
+assert.doesNotMatch(tactics, /<(?:ul|ol)\b/, 'Tactic examples must not be a bulleted or numbered list');
+assert.match(tactics, /<table\b[^>]*data-lean-tactics=/, 'The tactic examples need a table');
+assert.equal((tactics.match(/scope="col"/g) ?? []).length, 2, 'The tactics table needs two column headers');
+assert.equal((tactics.match(/scope="row"/g) ?? []).length, 7, 'Each tactic needs a row header');
+assert.doesNotMatch(tactics, /<h4\b/, 'Tactics should use table labels instead of subsection headings');
 assert.equal((tactics.match(/<pre\b/g) ?? []).length, 7, 'Tactic examples are missing');
 assert.ok((leanPost.match(/class="katex"/g) ?? []).length >= 20, 'Lean article math is missing');
 assert.ok(leanPost.includes('formally verifiable solutions provide a remedy.'));
-for (const name of ['lean-goal-state', 'amc12-constraint']) {
-  const image = leanPost.match(new RegExp(`src="(/assets/[^"]*${name}[^"]*\\.png)"`));
-  assert.ok(image, `Missing Lean article diagram: ${name}`);
-  const png = readFileSync(join(build, decodeURIComponent(image[1].slice(1))));
-  assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+assert.doesNotMatch(
+  leanPost,
+  /src="[^"]*(?:lean-goal-state|amc12-constraint)[^"]*\.png"/,
+  'The Lean article must use readable figures instead of the original screenshots',
+);
+const walkthrough = leanPost.match(/<figure\b[^>]*data-lean-figure="proof"[\s\S]*?<\/figure>/)?.[0];
+assert.ok(walkthrough, 'The proof walkthrough must render on the server');
+assert.deepEqual(
+  [...walkthrough.matchAll(/data-proof-step="(\d)"/g)].map(([, step]) => Number(step)),
+  [0, 1, 2, 3, 4, 5, 6, 7],
+  'The proof walkthrough needs all eight selectable proof lines',
+);
+assert.equal((walkthrough.match(/aria-pressed="true"/g) ?? []).length, 1);
+assert.match(walkthrough, /<button\b(?=[^>]*data-proof-step="0")(?=[^>]*aria-pressed="true")/);
+assert.doesNotMatch(walkthrough, /<div\b(?=[^>]*data-goal-state="0")(?=[^>]*\bhidden)/);
+for (const step of [1, 2, 3, 4, 5, 6, 7]) {
+  assert.match(walkthrough, new RegExp(`<div\\b(?=[^>]*data-goal-state="${step}")(?=[^>]*\\bhidden)`));
 }
+const proofGoalStates = [...walkthrough.matchAll(
+  /<div\b[^>]*data-goal-state="(\d)"[^>]*>[\s\S]*?<\/div>/g,
+)];
+assert.deepEqual(
+  proofGoalStates.map(([, step]) => Number(step)),
+  [0, 1, 2, 3, 4, 5, 6, 7],
+);
+assert.deepEqual(
+  proofGoalStates.map(([html]) => (html.match(/data-lean-goal=/g) ?? []).length),
+  [1, 1, 2, 1, 1, 1, 1, 0],
+  'Proof states must include both cases, the divisor subproof, and no remaining goals at the end',
+);
+assert.match(walkthrough, /h_prime : IsPrime n/);
+assert.match(walkthrough, /h_prime : ¬IsPrime n/);
+assert.match(proofGoalStates[6][0], /hp : IsPrime p/);
+assert.match(proofGoalStates[6][0], /hpk : p ∣ k/);
+assert.match(proofGoalStates[7][0], /No goals/);
+assert.match(proofGoalStates[7][0], /The theorem is proved/);
+assert.match(walkthrough, /aria-live="polite"/);
+assert.match(walkthrough, /not a live Lean editor/);
+const constraint = leanPost.match(/<figure\b[^>]*data-lean-figure="constraint"[\s\S]*?<\/figure>/)?.[0];
+assert.ok(constraint, 'The constraint figure must render on the server');
+assert.match(constraint, /<svg\b(?=[^>]*role="img")(?=[^>]*aria-labelledby=)/);
+assert.match(constraint, /viewBox="0 0 600 440"/);
+assert.match(constraint, /<rect\b(?=[^>]*data-constraint-boundary)(?=[^>]*width="160")(?=[^>]*height="160")/);
+assert.deepEqual(
+  [...constraint.matchAll(/data-vertex="([^"]+)"/g)].map(([, vertex]) => vertex),
+  ['-1,1', '1,1', '1,-1', '-1,-1'],
+);
+assert.match(constraint, /<circle\b(?=[^>]*cx="490")(?=[^>]*cy="220")/);
 
 const fonts = readdirSync(join(build, 'assets/fonts'));
 assert.ok(fonts.some((font) => font.startsWith('KaTeX_') && font.endsWith('.woff2')));
