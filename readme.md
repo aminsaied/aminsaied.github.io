@@ -121,7 +121,10 @@ figures support keyboard input, dark mode, and narrow screens, and the stability
 figure has an expandable table of exact values.
 
 The static matrix renders on the server using only `degree-five.json`, a small
-subset of the full table. It does not trigger the interactive bundle.
+subset of the full table. Every row and column has a Young-diagram label,
+with lambda and mu naming the axes and the coefficient symbol in the top-left
+corner. On narrow screens the matrix scrolls horizontally to keep the labels
+legible. It does not trigger the interactive bundle.
 An unnumbered static cartoon follows the first explanation of decomposition
 puzzles, using Example 3.18 of the paper. It lists the ten Lie pieces through
 degree 5 and tracks the selected pieces by colour and index. The degree check

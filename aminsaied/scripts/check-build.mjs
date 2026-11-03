@@ -283,6 +283,34 @@ if (mode === 'preview') {
   assert.ok(baselineFigure, 'The degree-five figure must render on the server');
   assert.doesNotMatch(baselineFigure, /<(?:canvas|button|input|select)\b/, 'The baseline must be static');
   assert.deepEqual(
+    [...baselineFigure.matchAll(/<text\b[^>]*data-baseline-label="([^"]+)"[^>]*>([\s\S]*?)<\/text>/g)]
+      .map(([, label, content]) => [label, content.replace(/<[^>]+>/g, '')]),
+    [['coefficient', 'c\u03bb\u03bc'], ['source', '\u03bc'], ['target', '\u03bb']],
+    'The matrix must show its coefficient symbol and label the source and target axes',
+  );
+  assert.equal(
+    [...baselineFigure.matchAll(/<text\b/g)].length,
+    3 + baseline.matrix.flat().filter(Boolean).length,
+    'Only the coefficient symbol, axis names, and matrix entries should have text labels',
+  );
+  const baselineTicks = [...baselineFigure.matchAll(
+    /<g\b[^>]*data-baseline-axis="([^"]+)" data-partition="([^"]+)"[^>]*>([\s\S]*?)<\/g>/g,
+  )];
+  for (const axis of ['source', 'target']) {
+    assert.deepEqual(
+      baselineTicks.filter(([, name]) => name === axis).map(([, , partition]) => partition),
+      baseline.partitions.map((partition) => partition.join(',')),
+      `The ${axis} axis must label every partition in matrix order`,
+    );
+  }
+  for (const [, axis, partition, tick] of baselineTicks) {
+    assert.equal(
+      [...tick.matchAll(/<rect\b/g)].length,
+      partition.split(',').reduce((sum, part) => sum + Number(part), 0),
+      `The ${axis} tick for ${partition} must render its Young diagram`,
+    );
+  }
+  assert.deepEqual(
     [...baselineFigure.matchAll(/data-coefficient="(\d+),(\d+),(\d+)"/g)]
       .map((match) => match.slice(1).map(Number)),
     baseline.matrix.flatMap((row, i) => row.flatMap((value, j) => value ? [[i, j, value]] : [])),

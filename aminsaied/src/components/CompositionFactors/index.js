@@ -11,60 +11,99 @@ export {CompositionProvider} from './shared';
 export function DegreeFiveMatrix() {
   const count = baseline.partitions.length;
   const cell = 24;
-  const margin = 32;
+  const margin = 60;
+  const diagramCenter = 40;
+  const diagramCell = 4;
   const extent = count * cell;
-  const degrees = baseline.partitions.map((partition) => partition.reduce((sum, part) => sum + part, 0));
-  const groups = Array.from({length: 5}, (_, i) => ({
-    degree: i + 1,
-    start: degrees.indexOf(i + 1),
-    end: degrees.lastIndexOf(i + 1) + 1,
-  }));
 
   return (
     <figure className={styles.figure} data-composition-figure="baseline">
       <FigureHeader kind="baseline">
-        18 partitions on each axis, grouped by degree.
+        18 partitions on each axis, shown as Young diagrams.
       </FigureHeader>
-      <svg
-        className={styles.baselineMatrix}
-        viewBox={`0 0 ${extent + margin + 4} ${extent + margin + 4}`}
-        role="img"
-        aria-label="Coefficient matrix through degree 5. Diagonal entries are 1; entries above the diagonal are 0. Nonzero entries below the diagonal range from 1 to 4."
+      <div
+        className={styles.baselineScroll}
+        role="region"
+        aria-label="Degree-five coefficient matrix; scroll horizontally on narrow screens"
+        tabIndex={0}
       >
-        <text x="15" y="15">&lambda;/&mu;</text>
-        {groups.map(({degree, start, end}) => (
-          <g key={degree}>
-            <text x={margin + (start + end) * cell / 2} y="15">{degree}</text>
-            <text x="15" y={margin + (start + end) * cell / 2}>{degree}</text>
-          </g>
-        ))}
-        <rect x={margin} y={margin} width={extent} height={extent} className={styles.baselineBackground} />
-        <path
-          className={styles.baselineGrid}
-          d={Array.from({length: count + 1}, (_, i) => {
-            const offset = margin + i * cell;
-            return `M${margin},${offset}h${extent}M${offset},${margin}v${extent}`;
-          }).join(' ')}
-        />
-        {baseline.matrix.flatMap((row, rowIndex) => row.map((value, columnIndex) => value ? (
-          <g
-            key={`${rowIndex}-${columnIndex}`}
-            className={rowIndex === columnIndex ? styles.baselineDiagonal : styles.baselineCell}
-            data-coefficient={`${rowIndex},${columnIndex},${value}`}
+        <svg
+          className={styles.baselineMatrix}
+          viewBox={`0 0 ${extent + margin + 4} ${extent + margin + 4}`}
+          role="img"
+          aria-label="Coefficient matrix through degree 5. Young diagrams label the target partitions lambda on rows and source partitions mu on columns. Diagonal entries are 1; entries above the diagonal are 0. Nonzero entries below the diagonal range from 1 to 4."
+        >
+          <text
+            x="15"
+            y="15"
+            className={styles.baselineMathLabel}
+            data-baseline-label="coefficient"
           >
-            <rect
-              x={margin + columnIndex * cell + 1}
-              y={margin + rowIndex * cell + 1}
-              width={cell - 2}
-              height={cell - 2}
-            />
-            <text x={margin + (columnIndex + 0.5) * cell} y={margin + (rowIndex + 0.5) * cell}>
-              {value}
-            </text>
+            c<tspan baselineShift="sub" fontSize="70%">&lambda;&mu;</tspan>
+          </text>
+          <text
+            x={margin + extent / 2}
+            y="15"
+            className={styles.baselineMathLabel}
+            data-baseline-label="source"
+          >
+            &mu;
+          </text>
+          <text
+            x="15"
+            y={margin + extent / 2}
+            className={styles.baselineMathLabel}
+            data-baseline-label="target"
+          >
+            &lambda;
+          </text>
+          <g className={styles.baselineAxis}>
+            {['source', 'target'].flatMap((axis) => baseline.partitions.map((partition, i) => {
+              const center = margin + (i + 0.5) * cell;
+              const x = (axis === 'source' ? center : diagramCenter) - partition[0] * diagramCell / 2;
+              const y = (axis === 'target' ? center : diagramCenter) - partition.length * diagramCell / 2;
+              return (
+                <g
+                  key={`${axis}-${i}`}
+                  data-baseline-axis={axis}
+                  data-partition={partition.join(',')}
+                  transform={`translate(${x} ${y}) scale(${diagramCell / 18})`}
+                >
+                  <title>{`${axis === 'source' ? 'Source' : 'Target'} partition ${notation(partition)}`}</title>
+                  <YoungDiagram partition={partition} />
+                </g>
+              );
+            }))}
           </g>
-        ) : null))}
-      </svg>
+          <rect x={margin} y={margin} width={extent} height={extent} className={styles.baselineBackground} />
+          <path
+            className={styles.baselineGrid}
+            d={Array.from({length: count + 1}, (_, i) => {
+              const offset = margin + i * cell;
+              return `M${margin},${offset}h${extent}M${offset},${margin}v${extent}`;
+            }).join(' ')}
+          />
+          {baseline.matrix.flatMap((row, rowIndex) => row.map((value, columnIndex) => value ? (
+            <g
+              key={`${rowIndex}-${columnIndex}`}
+              className={rowIndex === columnIndex ? styles.baselineDiagonal : styles.baselineCell}
+              data-coefficient={`${rowIndex},${columnIndex},${value}`}
+            >
+              <rect
+                x={margin + columnIndex * cell + 1}
+                y={margin + rowIndex * cell + 1}
+                width={cell - 2}
+                height={cell - 2}
+              />
+              <text x={margin + (columnIndex + 0.5) * cell} y={margin + (rowIndex + 0.5) * cell}>
+                {value}
+              </text>
+            </g>
+          ) : null))}
+        </svg>
+      </div>
       <figcaption className={styles.caption}>
+        Rows index target partitions; columns index source partitions.
         Rose marks the diagonal; green marks nonzero entries below it. Blank cells are zero.
         Within each degree, partitions are ordered reverse lexicographically.
       </figcaption>
