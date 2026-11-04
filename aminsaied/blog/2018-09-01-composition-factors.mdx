@@ -21,18 +21,19 @@ In 2017, my advisor asked me to compute a family of coefficients
 $c_{\lambda\mu}$ arising in the study of the Johnson homomorphism of the
 mapping class group.
 
-Their connection with mapping class groups is not essential to this story.
-Instead, I want to describe how to compute them efficiently, and how
-expanding the range of computation revealed hints of a deeper structure
-among the coefficients.[^thesis]
+In this post I want to describe how to compute these coefficients
+efficiently, and how expanding the range of computation revealed a deeper
+structure hidden among the coefficients. Isolating that structure turned
+out to be the key insight in my thesis!
+
+We'll begin by defining the coefficients $c_{\lambda\mu}$, taking the
+shortest path to do so in order to focus more on the algorithm itself.
 
 <!-- truncate -->
 
 <CompositionProvider>
 
 ## Plethysms afoot
-
-So, briefly, what are the coefficients $c_{\lambda\mu}$?
 
 Recall that, given a partition $\lambda\vdash n$, the **Schur functor**
 $\mathbb S_\lambda$ assigns to a vector space $V$ the image of a Young symmetrizer acting on
@@ -289,8 +290,8 @@ with $|\lambda|=d$ simultaneously:
 3. Assemble the compatible instructions and accumulate their Schur
    coefficients with the appropriate weights and overcount correction.
 
-The optimization does not eliminate plethysm; it avoids evaluating
-assemblies that cannot contribute.
+The optimization reduces the number of plethysm calculations by
+considering only assemblies that can contribute.
 
 The following comparison is from the experiments reported in the paper:
 
@@ -304,8 +305,7 @@ The paper's **"over 750-fold"** claim refers to the expanded number of
 matrix entries. The degree-5 timing comparison is a separate result:
 roughly 498 times faster in that experiment.
 
-These are timings from the 2017 experiments, not benchmarks of current
-versions of Sage.[^timings]
+These timings come from the 2017 experiments.[^timings]
 
 ## Diagonal stabilization
 
@@ -342,8 +342,8 @@ c_{\lambda^{+r}\mu^{+r}}=C
 \qquad\text{for all }r\geq N.
 $$
 
-The finite computation motivates this statement but does not prove it or
-determine the onset of permanent stabilization.
+The finite computation provides evidence for this conjecture. Proving
+eventual stability and determining when it begins require further arguments.
 
 ## Representation stability via PD-modules
 
@@ -381,28 +381,19 @@ conjecture above.
 The computation supplied evidence for the stability statement. The
 PD-module structure explains why it holds beyond the computed range.
 
-## Sources and reproducibility
+## Sources
 
 The article follows
 [An efficient algorithm computing composition factors of $T(V)^{\otimes n}$](https://arxiv.org/abs/1711.04326),
 especially Sections 2.3, 3.4, 5, and 6. The proof of stability is in
 [Chapter 5 of my thesis](https://ecommons.cornell.edu/server/api/core/bitstreams/c749bfe3-9841-4770-988b-96aff34fa987/content#page=132);
-Chapter 4 develops the algorithm and its visualizations. The original
-[Sage implementation is on GitHub](https://github.com/aminsaied/composition_factors/tree/524d90f982ce447b3ddaec0f53409e31d9de5872).
-
-**Data provenance.** The figures use freshly reconstructed coefficients,
-not values extracted from images or a recovered archive of the original
-run. They were computed from the defining plethysm using exact
-arithmetic, independently of the paper's puzzle algorithm.[^reconstruction]
-The download includes the partition order, source reference, and a
-matrix checksum. All interactions use this precomputed table; no algebra
-is evaluated in the browser.
+Chapter 4 develops the algorithm and its visualizations. For code and
+reproducibility, see the
+[`composition_factors` repository](https://github.com/aminsaied/composition_factors/tree/524d90f982ce447b3ddaec0f53409e31d9de5872).
 
 <DataDownload />
 
 </CompositionProvider>
-
-[^thesis]: Unpacking that structure turned out to be at the heart of my thesis.
 
 [^conventions]: Work over a field $\mathbf{k}$ of characteristic zero.
     These are universal Schur-functor multiplicities: interpret the identities
@@ -492,9 +483,3 @@ is evaluated in the browser.
     are $(S_i,S_n)$-bimodules; the structure maps preserve the rank $n-i$.
     Sections 5.5 and 5.6 of the thesis give the stability theorem and the
     free-Lie construction.
-
-[^reconstruction]: The exporter, `scripts/generate-composition-data.py`,
-    uses degree-truncated power-sum plethysm with exact rational arithmetic.
-    It checks character orthogonality, integrality, nonnegativity, the
-    equal-degree identity, and examples from the original code. This is
-    not a port or timing comparison of the original algorithm.

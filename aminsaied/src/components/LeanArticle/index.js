@@ -157,7 +157,7 @@ export function ProofWalkthrough() {
       </div>
       <p className={styles.stepExplanation}>{proofSteps[step].explanation}</p>
       <figcaption className={styles.caption}>
-        Select a proof line or use Previous and Next. These are fixed example states, not a live Lean editor.
+        Select a proof line or use Previous and Next. The walkthrough displays a fixed set of example proof states.
       </figcaption>
       <noscript>Enable JavaScript to move beyond the initial goal.</noscript>
     </figure>
@@ -189,7 +189,7 @@ export function ConstraintFigure() {
         <desc id={`${id}-description`}>
           The constraint is the boundary of the square with vertices (-1, 1), (1, 1),
           (1, -1), and (-1, -1). Its interior is shaded green. Dashed diagonal guides
-          form a surrounding diamond, but are not the constraint. The point (3, 0)
+          form a surrounding diamond for visual reference. The point (3, 0)
           is marked to the right.
         </desc>
         <defs>

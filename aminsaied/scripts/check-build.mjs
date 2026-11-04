@@ -72,6 +72,18 @@ for (const route of ['/experience', '/blog', '/publications']) {
 }
 assert.doesNotMatch(home, /id="work-heading"/, 'The timeline must not remain on the homepage');
 
+const portraitCaption = home.match(/<figcaption>([\s\S]*?)<\/figcaption>/)?.[1];
+assert.ok(portraitCaption, 'The portrait caption is missing');
+assert.match(portraitCaption, /href="https:\/\/avatars\.githubusercontent\.com\/u\/13423197\?v=4"/);
+assert.match(portraitCaption, />Click here for more background<\/a>/);
+assert.doesNotMatch(home, /Currently at Microsoft AI|I work on reinforcement learning with verifiable rewards\./);
+for (const html of [home, blog]) {
+  assert.ok(
+    html.includes('Notes from an introductory talk I gave to the Microsoft AI team on Lean'),
+    'The Lean summary must mention the introductory Microsoft AI talk',
+  );
+}
+
 const timeline = experience.match(/<ol\b[^>]*aria-labelledby="work-heading"[\s\S]*?<\/ol>/)?.[0];
 assert.ok(timeline, 'The experience timeline is missing');
 assert.deepEqual(
@@ -201,7 +213,7 @@ assert.match(proofGoalStates[6][0], /hpk : p ∣ k/);
 assert.match(proofGoalStates[7][0], /No goals/);
 assert.match(proofGoalStates[7][0], /The theorem is proved/);
 assert.match(walkthrough, /aria-live="polite"/);
-assert.match(walkthrough, /not a live Lean editor/);
+assert.match(walkthrough, /fixed set of example proof states/);
 const constraint = leanPost.match(/<figure\b[^>]*data-lean-figure="constraint"[\s\S]*?<\/figure>/)?.[0];
 assert.ok(constraint, 'The constraint figure must render on the server');
 assert.match(constraint, /<svg\b(?=[^>]*role="img")(?=[^>]*aria-labelledby=)/);
@@ -317,8 +329,15 @@ function checkCompositionArticle() {
   );
   assert.match(composition, /In 2017, my advisor asked me/);
   assert.match(composition, /id="roll-up-your-sleeves"/);
-  assert.match(composition, /Unpacking that structure turned out to be at the heart of my thesis/);
-  assert.match(composition, /data-footnote-ref/, 'The opening must link to the thesis footnote');
+  const introduction = composition.slice(
+    composition.indexOf('In 2017, my advisor asked me'),
+    composition.indexOf('id="plethysms-afoot"'),
+  );
+  assert.match(introduction, /Isolating that structure turned\s+out to be the key insight in my thesis!/);
+  assert.match(introduction, /begin by defining the coefficients/);
+  assert.match(introduction, /taking the\s+shortest path to do so in order to focus more on the algorithm itself/);
+  assert.doesNotMatch(composition, /So, briefly, what are the coefficients/);
+  assert.doesNotMatch(introduction, /data-footnote-ref/, 'The thesis motivation must remain in the introduction');
   assert.match(composition, /1711\.04326#page=6/, 'The major-index rule needs its reference');
   assert.doesNotMatch(composition, /\\(?:boxed|fbox|fcolorbox)\b/, 'Article equations must not be boxed');
   const footnotesIndex = composition.indexOf('data-footnotes');
@@ -458,7 +477,13 @@ function checkCompositionArticle() {
     'Interactive content must load on demand',
   );
   assert.match(composition, /257,049/);
-  assert.match(composition, /freshly reconstructed/);
+  assert.match(composition, /id="sources"/);
+  assert.match(
+    composition,
+    /href="https:\/\/github\.com\/aminsaied\/composition_factors\/tree\/524d90f982ce447b3ddaec0f53409e31d9de5872"/,
+    'The sources must reference the implementation repository',
+  );
+  assert.doesNotMatch(composition, /Data provenance|freshly reconstructed|Sources and reproducibility/);
   assert.match(composition, /Download the exact coefficient table/);
   assert.match(composition, /id="stability-lab"/, 'The stability anchor must exist before its figure loads');
   assert.match(
@@ -468,7 +493,7 @@ function checkCompositionArticle() {
   );
   const figureBundle = readFileSync(coefficientBundles[0], 'utf8');
   assert.doesNotMatch(figureBundle, /including\s+zeros/i);
-  assert.match(figureBundle, /Every point is computed, not extrapolated/);
+  assert.match(figureBundle, /Each point comes from the exact coefficient table/);
   assert.match(figureBundle, /Maximum coefficient degree/);
   assert.match(figureBundle, /Show degree boundaries/);
   assert.match(figureBundle, /data-degree-start/, 'Degree boundaries must retain their degree labels');

@@ -434,7 +434,7 @@ export function ShapeAnalysis() {
       )}
       <figcaption className={styles.caption}>
         Rows and columns index the 10 Lie pieces through degree 5; diagonal cells would reuse the same piece.
-        These are actual candidate counts for this example, not measured runtimes.
+        The values give the candidate counts for this example.
         Instruction counts are distinct from the weighted multiplicities.
       </figcaption>
     </figure>
@@ -555,7 +555,7 @@ export function StabilityExplorer() {
         </div>
       </details>
       <figcaption className={styles.caption}>
-        Every point is computed, not extrapolated. Lines connect discrete samples only.
+        Each point comes from the exact coefficient table. Lines connect discrete samples only.
         Only the computed range is shown; the stabilization theorem is a separate statement.
       </figcaption>
     </figure>

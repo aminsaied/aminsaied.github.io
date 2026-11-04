@@ -1,6 +1,6 @@
 ---
 title: "Lean, formal proofs, and verifiable reasoning"
-description: "An introduction to Lean, its mathematical history, and how formal proofs help us distinguish correct reasoning from plausible answers."
+description: "Notes from an introductory talk I gave to the Microsoft AI team on Lean and its applications to mathematics and reinforcement learning with verifiable rewards."
 slug: lean-formal-proofs
 authors:
   - aminsaied
@@ -512,7 +512,7 @@ Here's an excerpt from GPT-5's attempt at solving this problem:
 Notice:
 
 - GPT-5 makes a geometric argument based on the shape determined by the given constraint.
-- Its description is **inconsistent**: the vertices $(\pm1,\pm1)$ define an axis-aligned square, not a square rotated by 45 degrees.
+- The vertices $(\pm1,\pm1)$ define an axis-aligned square. The model **incorrectly** describes it as rotated by 45 degrees.
 - It gives no justification for identifying the constraint with that boundary.
 - Completing the square correctly reduces the problem to maximizing the distance from $(3,0)$.
 - The final maximizing points are correct, but the geometric explanation is muddled. A correct answer alone does not establish that the reasoning is sound.

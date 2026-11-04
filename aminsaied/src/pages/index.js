@@ -18,9 +18,6 @@ export default function Home() {
           <div>
             <p className="eyebrow">Machine learning &amp; mathematics</p>
             <h1 id="intro-heading" className={styles.name}>Amin Saied</h1>
-            <p className={styles.lead}>
-              I work on reinforcement learning with verifiable rewards.
-            </p>
             <p className={styles.bio}>
               I&apos;m a Member of Technical Staff on the Post-training
               team at Microsoft AI. These days I work on the MAI-Code model
@@ -48,7 +45,11 @@ export default function Home() {
               height="473"
               fetchPriority="high"
             />
-            <figcaption>Currently at Microsoft AI</figcaption>
+            <figcaption>
+              <a href="https://avatars.githubusercontent.com/u/13423197?v=4">
+                Click here for more background
+              </a>
+            </figcaption>
           </figure>
         </section>
 

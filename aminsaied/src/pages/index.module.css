@@ -17,13 +17,6 @@
   margin: 0.6rem 0 1.4rem;
 }
 
-.lead {
-  max-width: 32rem;
-  font-size: 1.3rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
 .bio {
   color: var(--site-muted);
   max-width: 36rem;
@@ -141,7 +134,7 @@
   }
 
   .portrait figcaption {
-    display: none;
+    transform: none;
   }
 
   .explore {
