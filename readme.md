@@ -73,6 +73,11 @@ pages and feeds. Docusaurus also rejects broken internal links during the build.
 | Homepage styles | `aminsaied/src/pages/index.module.css` |
 | Navigation and plugins | `aminsaied/docusaurus.config.js` |
 
+Publications have a `data-topic` of `math` or `ml`; the ML group also includes
+experimentation work. The Math and ML filters start unselected, showing every
+entry. Select a topic to filter, or select it again to return to all publications.
+The filter behavior lives in `src/components/PublicationList/`.
+
 The current portrait is reused from `static/img/logo.svg`.
 
 ### Technical writing
