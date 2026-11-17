@@ -131,6 +131,22 @@ for (const html of [home, publications]) {
   );
 }
 
+const publicationFilters = publications.match(
+  /<div\b[^>]*role="group"[^>]*aria-label="Filter publications by topic"[\s\S]*?<\/div>/,
+)?.[0];
+assert.ok(publicationFilters, 'The publication topic filters are missing');
+assert.deepEqual(
+  [...publicationFilters.matchAll(/<button\b[^>]*aria-pressed="false"[^>]*>([^<]+)<\/button>/g)]
+    .map(([, label]) => label),
+  ['Math', 'ML'],
+  'Both publication topic filters must start unselected',
+);
+assert.deepEqual(
+  [...publications.matchAll(/<section\b[^>]*class="publication"[^>]*data-topic="([^"]+)"/g)]
+    .map(([, topic]) => topic),
+  ['ml', 'ml', 'ml', 'ml', 'math', 'math', 'math'],
+  'All publications must render initially, with topics assigned in chronological order',
+);
 assert.equal((publications.match(/class="publication"/g) ?? []).length, 7);
 assert.equal((publications.match(/class="publication-summary"/g) ?? []).length, 7);
 assert.match(publications, /href="https:\/\/arxiv\.org\/abs\/2404\.14219"/);

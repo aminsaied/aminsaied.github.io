@@ -5,6 +5,8 @@ hide_table_of_contents: true
 wrapperClassName: publications-route
 ---
 
+import PublicationList from '../components/PublicationList';
+
 <div className="publications-page">
 
 <header className="page-heading">
@@ -19,7 +21,9 @@ list and citation history, see my
 
 </header>
 
-<section className="publication">
+<PublicationList>
+
+<section className="publication" data-topic="ml">
 <p className="eyebrow">2024 &middot; Technical report</p>
 
 ## [Phi-3 Technical Report: A Highly Capable Language Model Locally on Your Phone](https://arxiv.org/abs/2404.14219)
@@ -35,7 +39,7 @@ to run locally on a phone.
 <p className="publication-links">[arXiv](https://arxiv.org/abs/2404.14219) &middot; [PDF](https://arxiv.org/pdf/2404.14219)</p>
 </section>
 
-<section className="publication">
+<section className="publication" data-topic="ml">
 <p className="eyebrow">2024 &middot; Findings of NAACL</p>
 
 ## [AGIEval: A Human-Centric Benchmark for Evaluating Foundation Models](https://aclanthology.org/2024.findings-naacl.149/)
@@ -54,7 +58,7 @@ overall performance masks specific limitations.
 <p className="publication-links">[ACL Anthology](https://aclanthology.org/2024.findings-naacl.149/) &middot; [PDF](https://aclanthology.org/2024.findings-naacl.149.pdf) &middot; [arXiv](https://arxiv.org/abs/2304.06364)</p>
 </section>
 
-<section className="publication">
+<section className="publication" data-topic="ml">
 <p className="eyebrow">2021 &middot; ICLR</p>
 
 ## [Economical Hyperparameter Optimization with Blended Search Strategy](https://openreview.net/pdf?id=VbLH04pRA3)
@@ -72,7 +76,7 @@ and resource consumption.
 <p className="publication-links">[Read the paper](https://openreview.net/pdf?id=VbLH04pRA3)</p>
 </section>
 
-<section className="publication">
+<section className="publication" data-topic="ml">
 <p className="eyebrow">2020 &middot; Technical article</p>
 
 ## [Automated Metrics Calculation in a Dynamic Heterogeneous Environment](https://www.microsoft.com/en-us/research/group/experimentation-platform-exp/articles/metric-computation-for-multiple-backends/)
@@ -90,7 +94,7 @@ across products and compute platforms.
 <p className="publication-links">[Article](https://www.microsoft.com/en-us/research/group/experimentation-platform-exp/articles/metric-computation-for-multiple-backends/) &middot; [Preprint](https://arxiv.org/abs/1912.00913)</p>
 </section>
 
-<section className="publication">
+<section className="publication" data-topic="math">
 <p className="eyebrow">2018 &middot; PhD thesis</p>
 
 ## [Stable representation theory of categories and applications to families of (bi)modules over symmetric groups](https://core.ac.uk/download/pdf/196232395.pdf)
@@ -106,7 +110,7 @@ and the homology of partition lattices.
 <p className="publication-links">[Read the thesis](https://core.ac.uk/download/pdf/196232395.pdf)</p>
 </section>
 
-<section className="publication">
+<section className="publication" data-topic="math">
 <p className="eyebrow">2017 &middot; Mathematics</p>
 
 ## [An efficient algorithm computing composition factors of $T(V)^{\otimes n}$](https://arxiv.org/abs/1711.04326)
@@ -122,7 +126,7 @@ representation-theoretic coefficients by more than 750-fold.
 <p className="publication-links">[arXiv](https://arxiv.org/abs/1711.04326)</p>
 </section>
 
-<section className="publication">
+<section className="publication" data-topic="math">
 <p className="eyebrow">2016 &middot; Mathematics</p>
 
 ## [On the FI-module structure of $H^i(\Gamma_{n,s})$](https://arxiv.org/abs/1506.05861)
@@ -137,5 +141,7 @@ eventually follow polynomial formulas.
 
 <p className="publication-links">[arXiv](https://arxiv.org/abs/1506.05861)</p>
 </section>
+
+</PublicationList>
 
 </div>
