@@ -22,8 +22,8 @@ export default function Experience() {
                 {work.current && <span className={styles.current}>Current</span>}
               </div>
               <div>
-                <h2>{work.role}</h2>
-                <p className={styles.team}>{work.team}</p>
+                <h2>{work.team}</h2>
+                <p className={styles.jobTitle}>{work.role}</p>
                 {work.description && (
                   <p className={styles.description}>{work.description}</p>
                 )}

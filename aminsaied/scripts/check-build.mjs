@@ -87,15 +87,16 @@ for (const html of [home, blog]) {
 const timeline = experience.match(/<ol\b[^>]*aria-labelledby="work-heading"[\s\S]*?<\/ol>/)?.[0];
 assert.ok(timeline, 'The experience timeline is missing');
 assert.deepEqual(
-  [...timeline.matchAll(/<h2\b[^>]*>([^<]+)<\/h2>/g)].map(([, role]) => role),
+  [...timeline.matchAll(/<h2\b[^>]*>([^<]+)<\/h2>\s*<p\b[^>]*>([^<]+)<\/p>/g)]
+    .map(([, team, role]) => [team, role]),
   [
-    'Member of Technical Staff',
-    'Science Lead',
-    'Research Scientist',
-    'Applied Scientist',
-    'Mathematics PhD',
+    ['Microsoft AI, Post-training', 'Member of Technical Staff'],
+    ['Azure&#x27;s AI Safety Team, Responsible AI', 'Science Lead'],
+    ['Microsoft GenAI', 'Research Scientist'],
+    ['Microsoft, ExP', 'Applied Scientist'],
+    ['Cornell University', 'Mathematics PhD'],
   ],
-  'All five work highlights must be present in reverse chronological order',
+  'All five work highlights must show team headings with job titles below, in reverse chronological order',
 );
 assert.ok(experience.includes('Microsoft AI, Post-training'), 'The current team is missing');
 assert.ok(experience.includes('Microsoft, ExP'), 'The ExP team is missing');
