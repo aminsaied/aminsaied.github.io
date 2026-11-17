@@ -3,8 +3,8 @@
 A personal website built with Docusaurus 3, React, and Markdown/MDX. The site
 has four sections: Home, Blog, Experience, and Publications. The homepage has
 an introduction, the three most recent blog posts, and pointers to the other
-sections; the full career timeline is at `/experience`. The website project
-is in `aminsaied/`.
+sections; the full career timeline is at `/experience`, with team or institution
+headings and job titles below. The website project is in `aminsaied/`.
 
 ## Local setup
 
